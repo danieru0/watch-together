@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
 import Login from './pages/Login';
 import Create from './pages/Create';
+
+import Nav from './components/organisms/Nav';
+
+library.add(faSignOutAlt);
 
 const GlobalContainer = styled.div`
 	width: 100%;
@@ -20,6 +26,7 @@ const GlobalContainer = styled.div`
 function App() {
 	return (
 		<GlobalContainer>
+			<Nav />
 			<Switch>
 				<Route exact path="/">
 					<Rooms />

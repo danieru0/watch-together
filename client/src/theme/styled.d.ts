@@ -7,6 +7,7 @@ declare module "styled-components" {
         fontColorPrimary: string;
         fontcolorSecondary: string;
         red: string;
+        notSelected: string;
         fontFamily: string;
         fontSizeEm: string;
     }

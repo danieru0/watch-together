@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
     fontColorPrimary: "#6FFFE9",
     fontcolorSecondary: "#5BC0BE",
     red: "#FF0000",
+    notSelected: "#495057",
     fontFamily: 'Roboto',
     fontSizeEm: '18px'
 }

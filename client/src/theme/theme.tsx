@@ -5,6 +5,7 @@ const theme: DefaultTheme = {
     primaryHover: "#0A021A",
     secondary: "#1C2541",
     functional: "#3A506B",
+    functionalHover: "#2A405A",
     fontColorPrimary: "#6FFFE9",
     fontcolorSecondary: "#5BC0BE",
     red: "#FF0000",

@@ -17,6 +17,7 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     position: sticky;
+    top: 0;
 `
 
 const Wrapper = styled.div`

@@ -6,6 +6,7 @@ declare module "styled-components" {
         primaryHover: string;
         secondary: string;
         functional: string;
+        functionalHover: string;
         fontColorPrimary: string;
         fontcolorSecondary: string;
         red: string;

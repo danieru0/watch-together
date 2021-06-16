@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -11,7 +11,7 @@ import Create from './pages/Create';
 
 import Nav from './components/organisms/Nav';
 
-library.add(faSignOutAlt);
+library.add(faSignOutAlt, faUser);
 
 const GlobalContainer = styled.div`
 	width: 100%;

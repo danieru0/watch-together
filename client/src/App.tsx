@@ -23,24 +23,32 @@ const GlobalContainer = styled.div`
 	flex-direction: column;
 `
 
+const GlobalWrapper = styled.div`
+	width: 100%;
+	flex: 1;
+	display: flex;
+`
+
 function App() {
 	return (
 		<GlobalContainer>
 			<Nav />
-			<Switch>
-				<Route exact path="/">
-					<Rooms />
-				</Route>
-				<Route path="/room/:id">
-					<Room />
-				</Route>
-				<Route path="/login">
-					<Login />
-				</Route>
-				<Route path="/create">
-					<Create />
-				</Route>
-			</Switch>
+			<GlobalWrapper>
+				<Switch>
+					<Route exact path="/">
+						<Rooms />
+					</Route>
+					<Route path="/room/:id">
+						<Room />
+					</Route>
+					<Route path="/login">
+						<Login />
+					</Route>
+					<Route path="/create">
+						<Create />
+					</Route>
+				</Switch>
+			</GlobalWrapper>
 		</GlobalContainer>
   	);
 }

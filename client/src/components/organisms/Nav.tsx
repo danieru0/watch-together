@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import ButtonIcon from '../atoms/ButtonIcon';
 
 interface LogoProps {
-    isLogged: boolean;
+    islogged: string | undefined;
 }
 
 const Container = styled.div`
@@ -16,6 +16,7 @@ const Container = styled.div`
     padding: 0px 20px;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    position: sticky;
 `
 
 const Wrapper = styled.div`
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
 `
 
 const Logo = styled(Link)<LogoProps>`
-    text-transform: ${({isLogged}) => isLogged ? 'normal' : 'uppercase'};
+    text-transform: ${({islogged}) => islogged ? 'normal' : 'uppercase'};
     text-decoration: none;
     font-weight: 400;
     font-size: 1.3em;
@@ -52,7 +53,7 @@ const Nav = () => {
     return (
         <Container>
             <Wrapper>
-                <Logo isLogged={isLogged} to="/">
+                <Logo islogged={isLogged ? 'true' : undefined} to="/">
                     { isLogged ? 'daniru0' : 'watch-together' }
                 </Logo>
             </Wrapper>

@@ -9,10 +9,15 @@ interface IButton {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     type?: buttonType;
     to?: string;
+    lightHover?: boolean;
     [key: string]: any;
 }
 
-const ContainerButton = styled.button`
+interface ContainerButtonProps {
+    lighthover?: boolean;
+}
+
+const ContainerButton = styled.button<ContainerButtonProps>`
     border: none;
     background: ${({theme}) => theme.primary};
     color: ${({theme}) => theme.fontColorPrimary};
@@ -25,7 +30,7 @@ const ContainerButton = styled.button`
     transition: background .2s;
     
     &:hover, &:focus {
-        background: ${({theme}) => theme.primaryHover};
+        background: ${({theme, lighthover}) => lighthover ? theme.primaryHoverLight : theme.primaryHover};
     }
 `
 
@@ -44,7 +49,7 @@ const ContainerLink = styled(Link)`
     }
 `
 
-const Button = ({children, onClick, type = 'button', to, ...props}: IButton) => {
+const Button = ({children, onClick, type = 'button', to, lightHover, ...props}: IButton) => {
     if (to) {
         return (
             <ContainerLink to={to}>
@@ -54,7 +59,7 @@ const Button = ({children, onClick, type = 'button', to, ...props}: IButton) => 
     }
 
     return (
-        <ContainerButton type={type} onClick={onClick} {...props}>
+        <ContainerButton lighthover={lightHover} type={type} onClick={onClick} {...props}>
             {children}
         </ContainerButton>
     );

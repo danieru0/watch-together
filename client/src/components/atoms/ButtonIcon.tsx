@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { theme } from '../../theme/theme';
 
-type iconType = 'sign-out-alt';
+type iconType = 'sign-out-alt' | 'user' | 'external-link-square-alt' | 'cog' | 'comments' | 'youtube-square';
 type fontColor = 'primary' | 'notSelected' | undefined;
 
 interface IButtonIcon {
     iconType: iconType;
     fontColor?: fontColor;
     fontSize?: string;
+    isLogoIcon?: boolean;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     [key: string]: any;
 }
@@ -41,10 +42,16 @@ const Container = styled.button<ContainerProps>`
     outline: none;
 `
 
-const ButtonIcon = ({iconType, fontColor, fontSize, onClick, ...props}: IButtonIcon) => {
+const ButtonIcon = ({iconType, fontColor, fontSize = '1em', isLogoIcon, onClick, ...props}: IButtonIcon) => {
     return (
         <Container onClick={onClick} fontcolor={fontColor} fontSize={fontSize} {...props}>
-            <FontAwesomeIcon icon={iconType} />
+            {
+                isLogoIcon ? (
+                    <FontAwesomeIcon icon={['fab', iconType]} />
+                ) : (
+                    <FontAwesomeIcon icon={iconType} />
+                )
+            }
         </Container>
     );
 };

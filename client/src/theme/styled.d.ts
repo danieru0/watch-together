@@ -4,6 +4,7 @@ declare module "styled-components" {
     export interface DefaultTheme {
         primary: string;
         primaryHover: string;
+        primaryHoverLight: string;
         secondary: string;
         functional: string;
         functionalHover: string;

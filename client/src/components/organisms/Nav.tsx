@@ -55,7 +55,7 @@ const Nav = () => {
         <Container>
             <Wrapper>
                 <Logo islogged={isLogged ? 'true' : undefined} to="/">
-                    { isLogged ? 'daniru0' : 'watch-together' }
+                    { isLogged ? 'daniru0' : 'watch together' }
                 </Logo>
             </Wrapper>
             <Wrapper>

@@ -7,6 +7,7 @@ interface IInput {
     error?: string;
     placeholder?: string;
     name: string;
+    type?: 'text' | 'password';
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     [key: string]: any;
 }
@@ -47,14 +48,14 @@ const Inputt = styled.input`
     padding: 0px 5px;
 `
 
-const Input = ({value, labelText, error, placeholder, name, onChange, ...props}: IInput) => {
+const Input = ({value, labelText, type = 'text', error, placeholder, name, onChange, ...props}: IInput) => {
     return (
         <Container {...props}>
             <Wrapper>
                 <Text>{labelText}</Text>
                 { error && <Error>{error}</Error> }
             </Wrapper>
-            <Inputt onChange={onChange} name={name} value={value} placeholder={placeholder} />
+            <Inputt type={type} onChange={onChange} name={name} value={value} placeholder={placeholder} />
         </Container>
     );
 };

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { theme } from '../../theme/theme';
 
-type iconType = 'sign-out-alt' | 'user' | 'external-link-square-alt' | 'cog' | 'comments' | 'youtube-square';
+type iconType = 'sign-out-alt' | 'user' | 'external-link-square-alt' | 'cog' | 'comments' | 'times' | 'youtube-square';
 type fontColor = 'primary' | 'notSelected' | undefined;
 
 interface IButtonIcon {

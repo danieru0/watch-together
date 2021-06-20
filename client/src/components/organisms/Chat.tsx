@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import ChatMessages from './ChatMessages';
-import ChatInput from './ChatInput';
+import ChatMessages from '../molecules/ChatMessages';
+import ChatInput from '../molecules/ChatInput';
 
-import ChatUsers from './ChatUsers';
-import ChatSettings from './ChatSettings';
+import ChatUsers from '../molecules/ChatUsers';
+import ChatSettings from '../molecules/ChatSettings';
 
 const Container = styled.div`
     width: 30%;

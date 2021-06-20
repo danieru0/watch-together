@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import VideoNav from '../components/molecules/VideoNav'
 import YoutubeVideo from '../components/molecules/YoutubeVideo';
-import Chat from '../components/molecules/Chat';
+import Chat from '../components/organisms/Chat';
 
 const Container = styled.div`
     flex: 1;

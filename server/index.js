@@ -3,6 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 
+const initListeners = require('./listeners');
+
 const app = express();
 app.use(cors);
 
@@ -21,8 +23,4 @@ const server = express()
 
 const io = socket(server);
 
-io.on('connection', () => {
-    console.log('made socket connection');
-})
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+initListeners(io);

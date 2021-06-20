@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faYoutubeSquare } from '@fortawesome/free-brands-svg-icons';
+import { io } from 'socket.io-client';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -32,6 +33,9 @@ const GlobalWrapper = styled.div`
 `
 
 function App() {
+	useEffect(() => {
+		const socket = io();
+	}, [])
 
 	const isModalActive = false;
 

@@ -5,6 +5,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faYoutubeSquare } from '@fortawesome/free-brands-svg-icons';
 import { io } from 'socket.io-client';
+import { useAppSelector, useAppDispatch } from './app/hooks';
+
+import { selectSocket, setSocket } from './features/socket/socketSlice';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -33,9 +36,22 @@ const GlobalWrapper = styled.div`
 `
 
 function App() {
+	const socketSelector = useAppSelector(selectSocket);
+	const dispatch = useAppDispatch();
+
 	useEffect(() => {
 		const socket = io();
-	}, [])
+
+		dispatch(setSocket(socket));
+	}, [dispatch])
+
+	useEffect(() => {
+		if (socketSelector.socket) {
+			socketSelector.socket.on('connected', data => {
+				alert(data);
+			})
+		}
+	}, [socketSelector]);
 
 	const isModalActive = false;
 

@@ -1,5 +1,5 @@
 const connected = socket => {
-    socket.emit('connected');
+    socket.emit('connected', 'bubu');
     console.log('aaa');
 }
 

@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { faYoutubeSquare } from '@fortawesome/free-brands-svg-icons';
-import { io } from 'socket.io-client';
-import { useAppSelector, useAppDispatch } from './app/hooks';
+import { io, Socket } from 'socket.io-client';
 
-import { selectSocket, setSocket } from './features/socket/socketSlice';
+import socketContext from './context/socketContext';
+
+import WithoutLogin from './hocs/WithoutLogin';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -17,7 +18,9 @@ import Create from './pages/Create';
 import Modal from './components/organisms/Modal';
 import Nav from './components/organisms/Nav';
 
-library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faYoutubeSquare);
+library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faYoutubeSquare);
+
+const WithoutLoginComponent = WithoutLogin(Login);
 
 const GlobalContainer = styled.div`
 	width: 100%;
@@ -36,45 +39,38 @@ const GlobalWrapper = styled.div`
 `
 
 function App() {
-	const socketSelector = useAppSelector(selectSocket);
-	const dispatch = useAppDispatch();
+	const [socket, setSocket] = useState<Socket | null>(null);
 
 	useEffect(() => {
 		const socket = io();
 
-		dispatch(setSocket(socket));
-	}, [dispatch])
-
-	useEffect(() => {
-		if (socketSelector.socket) {
-			socketSelector.socket.on('connected', data => {
-				alert(data);
-			})
-		}
-	}, [socketSelector]);
+		setSocket(socket);
+	}, [])
 
 	const isModalActive = false;
 
 	return (
 		<GlobalContainer>
-			{isModalActive && <Modal />}
-			<Nav />
-			<GlobalWrapper>
-				<Switch>
-					<Route exact path="/">
-						<Rooms />
-					</Route>
-					<Route path="/room/:id">
-						<Room />
-					</Route>
-					<Route path="/login">
-						<Login />
-					</Route>
-					<Route path="/create">
-						<Create />
-					</Route>
-				</Switch>
-			</GlobalWrapper>
+			<socketContext.Provider value={socket}>
+				{isModalActive && <Modal />}
+				<Nav />
+				<GlobalWrapper>
+					<Switch>
+						<Route exact path="/">
+							<Rooms />
+						</Route>
+						<Route path="/room/:id">
+							<Room />
+						</Route>
+						<Route path="/login">
+							<WithoutLoginComponent />
+						</Route>
+						<Route path="/create">
+							<Create />
+						</Route>
+					</Switch>
+				</GlobalWrapper>
+			</socketContext.Provider>
 		</GlobalContainer>
   	);
 }

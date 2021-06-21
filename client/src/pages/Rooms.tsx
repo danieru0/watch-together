@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
+
+import { selectAuth } from '../features/auth/authSlice';
 
 import Line from '../components/atoms/Line';
 import RoomButton from '../components/molecules/RoomButton';
@@ -66,13 +69,14 @@ const Text = styled.span`
 `
 
 const Rooms = () => {
-    const isLogged = false;
+    const authSelector = useAppSelector(selectAuth);
+
     const rooms = true;
 
     return (
         <Container>
             <Wrapper>
-                <StyledLink to={isLogged ? '/create' : '/login'}>{isLogged ? 'Create room' : 'Login'}</StyledLink>
+                <StyledLink to={authSelector.login ? '/create' : '/login'}>{authSelector.login ? 'Create room' : 'Login'}</StyledLink>
                 <StyledLine />
                 {
                     rooms ? (

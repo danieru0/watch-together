@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
+
+import { selectAuth } from '../../features/auth/authSlice';
 
 import ButtonIcon from '../atoms/ButtonIcon';
 
@@ -44,7 +47,8 @@ const StyledButtonIcon = styled(ButtonIcon)`
 `
 
 const Nav = () => {
-    const isLogged = false;
+    const authSelector = useAppSelector(selectAuth);
+
     const isInRoom = false;
 
     const handleLogOutclick = () => {
@@ -54,8 +58,8 @@ const Nav = () => {
     return (
         <Container>
             <Wrapper>
-                <Logo islogged={isLogged ? 'true' : undefined} to="/">
-                    { isLogged ? 'daniru0' : 'watch together' }
+                <Logo islogged={authSelector.login ? 'true' : undefined} to="/">
+                    { authSelector.login ? authSelector.login : 'watch together' }
                 </Logo>
             </Wrapper>
             <Wrapper>

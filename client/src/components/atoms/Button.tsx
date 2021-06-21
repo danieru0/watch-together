@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type buttonType = 'submit' | 'button' | 'reset';
 
@@ -10,6 +11,7 @@ interface IButton {
     type?: buttonType;
     to?: string;
     lightHover?: boolean;
+    loading?: boolean;
     [key: string]: any;
 }
 
@@ -49,7 +51,7 @@ const ContainerLink = styled(Link)`
     }
 `
 
-const Button = ({children, onClick, type = 'button', to, lightHover, ...props}: IButton) => {
+const Button = ({children, onClick, type = 'button', to, loading, lightHover, ...props}: IButton) => {
     if (to) {
         return (
             <ContainerLink to={to}>
@@ -59,8 +61,14 @@ const Button = ({children, onClick, type = 'button', to, lightHover, ...props}: 
     }
 
     return (
-        <ContainerButton lighthover={lightHover} type={type} onClick={onClick} {...props}>
-            {children}
+        <ContainerButton disabled={loading} lighthover={lightHover} type={type} onClick={onClick} {...props}>
+            {
+                loading ? (
+                    <FontAwesomeIcon icon="circle-notch" spin />
+                ) : (
+                    children
+                )
+            }
         </ContainerButton>
     );
 };

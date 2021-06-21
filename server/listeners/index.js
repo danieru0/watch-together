@@ -1,4 +1,4 @@
-module.exports = io => {
+module.exports = (io, socket) => {
     const fs = require('fs');
     const path = require('path');
 
@@ -13,7 +13,7 @@ module.exports = io => {
             if (fileName !== 'index.js') {
                 const listener = require(path.resolve(__dirname, fileName));
 
-                listener(io);
+                listener(io, socket);
             }
         })
     })

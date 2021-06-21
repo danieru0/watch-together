@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useAppDispatch } from '../app/hooks';
+
+import { setLogin } from '../features/auth/authSlice';
+
+import { useSocketContext } from '../context/socketContext';
+
+import useSocketError from '../hooks/useSocketError';
 
 import Input from '../components/atoms/Input';
 import Button from '../components/atoms/Button';
@@ -33,9 +40,38 @@ const StyledButton = styled(Button)`
 `
 
 const Login = () => {
+    const socket = useSocketContext();
+    const dispatch = useAppDispatch();
+    const loginError = useSocketError();
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
     const initialValues: Values = {
         login: ''
     }
+
+    const handleLoginSubmit = (values: Values) => {
+        if (formSubmitted) return false;
+        if (!socket) return false;
+        setFormSubmitted(true);
+
+        socket.emit('requestLogin', values.login);
+
+        socket.on('sendLogin', login => {
+            setFormSubmitted(false);
+
+            dispatch(setLogin(login));
+        })
+    }
+
+    useEffect(() => {
+        if (loginError) {
+            alert(loginError);
+        }
+    }, [loginError]);
+
+    useEffect(() => {
+        return () => {socket && socket.off('sendLogin')}
+    }, [socket]);
 
     return (
         <Container>
@@ -43,13 +79,13 @@ const Login = () => {
                 initialValues={initialValues}
                 validationSchema={LoginSchema}
                 onSubmit={values => {
-                    console.log(values)
+                    handleLoginSubmit(values);
                 }}
             >
                 {({values, errors, handleChange}) => (
                     <StyledForm>
                         <Input onChange={handleChange} error={errors.login && errors.login as string} name="login" value={values.login} labelText="login" />
-                        <StyledButton type="submit">login</StyledButton>
+                        <StyledButton loading={formSubmitted} type="submit">login</StyledButton>
                     </StyledForm>
                 )}
             </Formik>

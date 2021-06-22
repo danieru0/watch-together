@@ -9,6 +9,7 @@ import { io, Socket } from 'socket.io-client';
 import socketContext from './context/socketContext';
 
 import WithoutLogin from './hocs/WithoutLogin';
+import WithLogin from './hocs/WithLogin';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -21,6 +22,7 @@ import Nav from './components/organisms/Nav';
 library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faYoutubeSquare);
 
 const WithoutLoginComponent = WithoutLogin(Login);
+const WithLoginCreateComponent = WithLogin(Create);
 
 const GlobalContainer = styled.div`
 	width: 100%;
@@ -66,7 +68,7 @@ function App() {
 							<WithoutLoginComponent />
 						</Route>
 						<Route path="/create">
-							<Create />
+							<WithLoginCreateComponent />
 						</Route>
 					</Switch>
 				</GlobalWrapper>

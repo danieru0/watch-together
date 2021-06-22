@@ -11,7 +11,7 @@ import Button from '../atoms/Button';
 
 const CreateSchema = Yup.object().shape({
     roomName: Yup.string().min(4, 'Too short').max(15, 'Too long').required('Required!'),
-    password: Yup.string().required('Required!')
+    password: Yup.string()
 })
 
 const SettingsSchema = Yup.object().shape({
@@ -29,7 +29,8 @@ export interface InitialValues {
 
 interface IFormikRoom {
     formikType: 'create' | 'settings';
-    onSubmit: (values: InitialValues) => void;
+    submitted?: boolean;
+    onSubmit: (values: InitialValues, formikType: string) => void;
 }
 
 const Container = styled.div`
@@ -102,7 +103,7 @@ const StyledButton = styled(Button)`
     margin: 0px 10px;
 `
 
-const Create = ({formikType, onSubmit}: IFormikRoom) => {
+const Create = ({formikType, submitted, onSubmit}: IFormikRoom) => {
     const initialValues: InitialValues = {
         roomName: '',
         password: '',
@@ -117,7 +118,7 @@ const Create = ({formikType, onSubmit}: IFormikRoom) => {
                 initialValues={initialValues}
                 validationSchema={formikType === 'create' ? CreateSchema : SettingsSchema}
                 onSubmit={values => {
-                    onSubmit(values);
+                    onSubmit(values, formikType);
                 }}
             >
                 {({values, errors, handleChange, setFieldValue}) => (
@@ -132,7 +133,7 @@ const Create = ({formikType, onSubmit}: IFormikRoom) => {
                         <StyledSlider value={values.usersNumber} onChange={(e) => setFieldValue('usersNumber', e)} railStyle={{ height: 10 }} trackStyle={{ display: 'none' }} marks={{ 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 }} min={2} max={6} step={1} />
                         <CheckRadioButton isCenter={false} onChange={handleChange} name="adminControl" type="checkbox" id="admin-checkbox" label="Only admin can control the video" value="adminControl" checked={values.adminControl} />
                         <ButtonsWrapper>
-                            <StyledButton type="submit">{formikType === 'create' ? 'Create' : 'Update'}</StyledButton>
+                            <StyledButton loading={submitted} type="submit">{formikType === 'create' ? 'Create' : 'Update'}</StyledButton>
                             {formikType === 'settings' && <StyledButton>Delete room</StyledButton>}
                         </ButtonsWrapper>
                     </StyledForm>

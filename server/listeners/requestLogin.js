@@ -1,13 +1,12 @@
 const events = require('../events');
-
-const data = require('../data/data');
+const { users } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestLogin', login => {
         const { sendLogin, sendError } = events;
 
-        if (data.hasOwnProperty(socket.id) && data[socket.id] === null) {
-            data[socket.id] = login;
+        if (users.hasOwnProperty(socket.id) && users[socket.id] === null) {
+            users[socket.id] = login;
 
             sendLogin(io, socket, login);
         } else {

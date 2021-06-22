@@ -5,7 +5,7 @@ const socket = require('socket.io');
 
 const initListeners = require('./listeners');
 
-const data = require('./data/data');
+const { users } = require('./data/data');
 
 const app = express();
 app.use(cors);
@@ -27,11 +27,10 @@ const io = socket(server);
 
 io.on('connection', socket => {
     initListeners(io, socket);
-    console.log('connected');
 
-    data[socket.id] = null;
+    users[socket.id] = null;
 
     socket.on('disconnect', () => {
-        delete data[socket.id];
+        delete users[socket.id];
     })
 })

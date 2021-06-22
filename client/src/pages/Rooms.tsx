@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
+
+import { RoomDataListInterface } from '../types/types';
+
+import { useSocketContext } from '../context/socketContext';
 
 import { selectAuth } from '../features/auth/authSlice';
 
@@ -69,9 +73,21 @@ const Text = styled.span`
 `
 
 const Rooms = () => {
+    const socket = useSocketContext();
     const authSelector = useAppSelector(selectAuth);
+    const [rooms, setRooms] = useState<RoomDataListInterface>({});
 
-    const rooms = true;
+    useEffect(() => {
+        if (socket) {
+            socket.emit('requestRoomsList');
+
+            socket.on('sendRoomsListUpdate', roomData => {
+                setRooms(roomData);
+            });
+        }
+
+        return () => {socket && socket.off('sendRoomsListUpdate')}
+    }, [socket]);
 
     return (
         <Container>
@@ -79,11 +95,14 @@ const Rooms = () => {
                 <StyledLink to={authSelector.login ? '/create' : '/login'}>{authSelector.login ? 'Create room' : 'Login'}</StyledLink>
                 <StyledLine />
                 {
-                    rooms ? (
-                        <>
-                            <StyledRoomButton name="rum 1" id="0" number={3} />
-                            <StyledRoomButton name="rum 2" id="1" number={1} />
-                        </>
+                    Object.keys(rooms).length !== 0 ? (
+                        Object.keys(rooms).map((roomId) => {
+                            const room = rooms[roomId];
+
+                            return (
+                                <StyledRoomButton name={room.name} id={room.id} number={`${room.activeUsers}/${room.usersNumberMax}`} />
+                            )
+                        })
                     ) : (
                         <Text>No rooms</Text>
                     )

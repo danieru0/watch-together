@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useHistory } from 'react-router-dom';
+
+import { selectRoom, setPasswordAfterCreation } from '../features/room/roomSlice';
 
 import { useSocketContext } from '../context/socketContext';
 
@@ -16,8 +20,12 @@ const Container = styled.div`
 
 const Create = () => {
     const socket = useSocketContext();
+    const dispatch = useAppDispatch();
+    const roomSelector = useAppSelector(selectRoom);
+    const history = useHistory();
     const formError = useSocketError();
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [roomId, setRoomId] = useState('');
 
     const handleCreateRoomSubmit = (values: InitialValues, formikType: string) => {
         if (formSubmitted) return false;
@@ -27,11 +35,18 @@ const Create = () => {
         if (formikType === 'create') {
             socket.emit('requestCreateRoom', values);
 
-            socket.on('sendRoomCreationStatus', () => {
-                alert('created');
-            })
+            socket.on('sendRoomCreationStatus', roomId => {
+                setRoomId(roomId);
+                dispatch(setPasswordAfterCreation(values.password));
+            });
         }
     }
+
+    useEffect(() => {
+        if (roomId) {
+            history.push(`/room/${roomId}`);
+        }
+    }, [roomSelector.passwordAfterCreation, roomId, history])
 
     useEffect(() => {
         if (formError) {

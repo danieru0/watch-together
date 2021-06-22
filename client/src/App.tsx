@@ -10,6 +10,7 @@ import socketContext from './context/socketContext';
 
 import WithoutLogin from './hocs/WithoutLogin';
 import WithLogin from './hocs/WithLogin';
+import WithRoomAuth from './hocs/WithRoomAuth';
 
 import Rooms from './pages/Rooms';
 import Room from './pages/Room';
@@ -23,6 +24,8 @@ library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, fa
 
 const WithoutLoginComponent = WithoutLogin(Login);
 const WithLoginCreateComponent = WithLogin(Create);
+const WithLoginRoomComponent = WithLogin(Room);
+const WithAuthRoomComponent = WithRoomAuth(WithLoginRoomComponent);
 
 const GlobalContainer = styled.div`
 	width: 100%;
@@ -62,7 +65,7 @@ function App() {
 							<Rooms />
 						</Route>
 						<Route path="/room/:id">
-							<Room />
+							<WithAuthRoomComponent />
 						</Route>
 						<Route path="/login">
 							<WithoutLoginComponent />

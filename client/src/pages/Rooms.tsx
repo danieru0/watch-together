@@ -100,14 +100,13 @@ const Rooms = () => {
                             const room = rooms[roomId];
 
                             return (
-                                <StyledRoomButton name={room.name} id={room.id} number={`${room.activeUsers}/${room.usersNumberMax}`} />
+                                <StyledRoomButton key={room.id} name={room.name} id={room.id} number={`${room.activeUsers}/${room.usersNumberMax}`} />
                             )
                         })
                     ) : (
                         <Text>No rooms</Text>
                     )
                 }
-
             </Wrapper>
         </Container>
     );

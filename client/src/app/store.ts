@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
+import roomReducer from '../features/room/roomSlice';
 
 export const store = configureStore({
   	reducer: {
-		  auth: authReducer
+		  auth: authReducer,
+		  room: roomReducer
   	},
 });
 

@@ -18,7 +18,7 @@ module.exports = (io, socket) => {
                 currentAdminId: socket.id
             }
 
-            sendRoomCreationStatus(io, socket);
+            sendRoomCreationStatus(io, socket, id);
             sendRoomsListUpdate(io, socket);
         } else {
             sendError(io, socket, "You are not logged in!");

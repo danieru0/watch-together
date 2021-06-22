@@ -1,5 +1,5 @@
-const sendRoomCreationStatus = (io, socket) => {
-    io.to(socket.id).emit('sendRoomCreationStatus');
+const sendRoomCreationStatus = (io, socket, id) => {
+    io.to(socket.id).emit('sendRoomCreationStatus', id);
 }
 
 module.exports = sendRoomCreationStatus;

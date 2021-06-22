@@ -6,7 +6,7 @@ import { selectAuth } from '../features/auth/authSlice';
 
 import { useSocketContext } from '../context/socketContext';
 
-const WithLogin = <P extends object>(Component: React.ComponentType<P>) => {
+const WithoutLogin = <P extends object>(Component: React.ComponentType<P>) => {
     return function Comp(props: P) {
         const [loginStatus, setLoginStatus] = useState<string | boolean>('loading')
         const socket = useSocketContext();
@@ -36,4 +36,4 @@ const WithLogin = <P extends object>(Component: React.ComponentType<P>) => {
     }
 }
 
-export default WithLogin;
+export default WithoutLogin;

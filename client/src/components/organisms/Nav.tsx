@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { selectAuth } from '../../features/auth/authSlice';
+import { useSocketContext } from '../..//context/socketContext';
+
+import { selectAuth, setLogin } from '../../features/auth/authSlice';
 
 import ButtonIcon from '../atoms/ButtonIcon';
 
@@ -47,12 +49,20 @@ const StyledButtonIcon = styled(ButtonIcon)`
 `
 
 const Nav = () => {
+    const socket = useSocketContext();
+    const dispatch = useAppDispatch();
     const authSelector = useAppSelector(selectAuth);
 
     const isInRoom = false;
 
     const handleLogOutclick = () => {
-        alert('logout')
+        if (!socket) return false;
+
+        socket.emit('requestLogout');
+
+        socket.on('sendLogout', () => {
+            dispatch(setLogin(''));
+        })
     }
 
     return (
@@ -66,7 +76,7 @@ const Nav = () => {
                 { isInRoom && <RoomName>plplplpl</RoomName> }
             </Wrapper>
             <Wrapper>
-                <StyledButtonIcon onClick={handleLogOutclick} iconType="sign-out-alt"  />
+                {authSelector.login && <StyledButtonIcon onClick={handleLogOutclick} iconType="sign-out-alt"  />}
             </Wrapper>
         </Container>
     );

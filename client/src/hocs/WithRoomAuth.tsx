@@ -6,6 +6,8 @@ import { selectRoom, setPasswordAfterCreation, setRoomIdFromLink } from '../feat
 
 import { useSocketContext } from '../context/socketContext';
 
+import FormikPassword from '../components/molecules/FormikPassword';
+
 const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
     return function Comp(props: P) {
         const socket = useSocketContext();
@@ -14,6 +16,8 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
         const dispatch = useAppDispatch();
         const [passwordStatus, setPasswordStatus] = useState<string | boolean>('loading');
         const [passwordError, setPasswordError] = useState('');
+        const [passwordValue, setPasswordValue] = useState('');
+        const [passwordFormSubmitted, setPasswordFormSubmitted] = useState(false);
 
         useEffect(() => {
             if (socket) {
@@ -34,8 +38,10 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
                 socket.on('sendJoinRoomStatus', data => {
                     if (data.status) {
                         setPasswordStatus(true);
+                        setPasswordFormSubmitted(false);
                     } else {
-                        setPasswordError('Wrong password1');
+                        setPasswordError('Wrong password!');
+                        setPasswordFormSubmitted(false);
                     }
                 })
             }
@@ -56,10 +62,18 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
             }
         }, [socket, id, roomSelector.passwordAfterCreation, roomSelector.roomIdFromLink, dispatch]);
 
+        const handlePasswordFormiSubmit = (passwordValue: string) => {
+            if (passwordFormSubmitted) return false;
+            if (!socket) return false;
+            setPasswordFormSubmitted(true);
+
+            socket.emit('requestJoinRoom', id, passwordValue);
+        }
+
         if (passwordStatus === true) {
             return <Component {...props} />
         } else if (passwordStatus === false) {
-            return <p>hasło formularz tutaj</p>
+            return <FormikPassword passwordError={passwordError} formSubmitted={passwordFormSubmitted} onSubmit={handlePasswordFormiSubmit} />
         }
 
         return null;

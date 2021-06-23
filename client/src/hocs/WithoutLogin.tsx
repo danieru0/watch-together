@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 
+import { selectRoom } from '../features/room/roomSlice';
 import { selectAuth } from '../features/auth/authSlice';
 
 import { useSocketContext } from '../context/socketContext';
@@ -11,6 +12,7 @@ const WithoutLogin = <P extends object>(Component: React.ComponentType<P>) => {
         const [loginStatus, setLoginStatus] = useState<string | boolean>('loading')
         const socket = useSocketContext();
         const authSelector = useAppSelector(selectAuth);
+        const roomSelector = useAppSelector(selectRoom);
 
         useEffect(() => {
             if (socket && authSelector.login !== '') {
@@ -25,7 +27,9 @@ const WithoutLogin = <P extends object>(Component: React.ComponentType<P>) => {
         }, [socket, authSelector.login]);
 
         if (loginStatus === true) {
-            return <Redirect to="/" />
+            return roomSelector.roomIdFromLink 
+                ? <Redirect to={`/room/${roomSelector.roomIdFromLink}`} />
+                : <Redirect to="/" />
         } else if (loginStatus === false || authSelector.login === '') {            
             return (
                 <Component {...props}/>

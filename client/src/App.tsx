@@ -24,8 +24,8 @@ library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, fa
 
 const WithoutLoginComponent = WithoutLogin(Login);
 const WithLoginCreateComponent = WithLogin(Create);
-const WithLoginRoomComponent = WithLogin(Room);
-const WithAuthRoomComponent = WithRoomAuth(WithLoginRoomComponent);
+const WithAuthRoomComponent = WithRoomAuth(Room);
+const WithLoginRoomComponent = WithLogin(WithAuthRoomComponent);
 
 const GlobalContainer = styled.div`
 	width: 100%;
@@ -65,7 +65,7 @@ function App() {
 							<Rooms />
 						</Route>
 						<Route path="/room/:id">
-							<WithAuthRoomComponent />
+							<WithLoginRoomComponent />
 						</Route>
 						<Route path="/login">
 							<WithoutLoginComponent />

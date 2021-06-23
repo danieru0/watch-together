@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 
-import { selectRoom, setPasswordAfterCreation } from '../features/room/roomSlice';
+import { selectRoom, setPasswordAfterCreation, setRoomIdFromLink } from '../features/room/roomSlice';
 
 import { useSocketContext } from '../context/socketContext';
 
@@ -48,9 +48,13 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
                     if (roomSelector.passwordAfterCreation) {
                         dispatch(setPasswordAfterCreation(''));
                     }
+
+                    if (roomSelector.roomIdFromLink) {
+                        dispatch(setRoomIdFromLink(''));
+                    }
                 }
             }
-        }, [socket, id, roomSelector.passwordAfterCreation, dispatch]);
+        }, [socket, id, roomSelector.passwordAfterCreation, roomSelector.roomIdFromLink, dispatch]);
 
         if (passwordStatus === true) {
             return <Component {...props} />

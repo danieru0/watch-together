@@ -3,18 +3,21 @@ import { RootState } from '../../app/store';
 
 interface AuthState {
     login: string;
+    userId: string;
 }
 
 const initialState: AuthState = {
-    login: ''
+    login: '',
+    userId: '',
 }
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setLogin: (state, action: PayloadAction<string>) => {
-            state.login = action.payload;
+        setLogin: (state, action: PayloadAction<{login: string, userId: string}>) => {
+            state.login = action.payload.login;
+            state.userId = action.payload.userId;
         }
     }
 })

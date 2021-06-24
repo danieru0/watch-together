@@ -56,10 +56,13 @@ const Login = () => {
 
         socket.emit('requestLogin', values.login);
 
-        socket.on('sendLogin', login => {
+        socket.on('sendLogin', (login, userId) => {
             setFormSubmitted(false);
 
-            dispatch(setLogin(login));
+            dispatch(setLogin({
+                login,
+                userId
+            }));
         })
     }
 

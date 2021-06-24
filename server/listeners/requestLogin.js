@@ -8,7 +8,7 @@ module.exports = (io, socket) => {
         if (users.hasOwnProperty(socket.id) && users[socket.id] === null) {
             users[socket.id] = login;
 
-            sendLogin(io, socket, login);
+            sendLogin(io, socket, login, socket.id);
         } else {
             sendError(io, socket, "You are already logged in!");
         }

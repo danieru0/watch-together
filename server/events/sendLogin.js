@@ -1,5 +1,5 @@
-const sendLogin = (io, socket, login) => {
-    io.to(socket.id).emit('sendLogin', login);
+const sendLogin = (io, socket, login, id) => {
+    io.to(socket.id).emit('sendLogin', login, id);
 }
 
 module.exports = sendLogin;

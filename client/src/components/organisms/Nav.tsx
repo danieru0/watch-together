@@ -61,7 +61,10 @@ const Nav = () => {
         socket.emit('requestLogout');
 
         socket.on('sendLogout', () => {
-            dispatch(setLogin(''));
+            dispatch(setLogin({
+                login: '',
+                userId: ''
+            }));
         })
     }
 

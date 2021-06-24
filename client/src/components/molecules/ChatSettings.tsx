@@ -5,6 +5,8 @@ import Button from '../atoms/Button';
 import ButtonIcon from '../atoms/ButtonIcon';
 
 interface IChatSettings {
+    userId: string;
+    adminId: string;
     onChangeCardClick: (type: string) => void;
 }
 
@@ -27,11 +29,17 @@ const StyledButtonIcon = styled(ButtonIcon)`
     margin-left: auto;
 `
 
-const ChatSettings = ({onChangeCardClick}: IChatSettings) => {
+const ChatSettings = ({userId, adminId, onChangeCardClick}: IChatSettings) => {
     return (
         <Container>
-            <StyledButton lightHover={true}>set admin</StyledButton>
-            <StyledButton lightHover={true}>kick</StyledButton>
+            {
+                userId === adminId && (
+                    <>
+                        <StyledButton lightHover={true}>set admin</StyledButton>
+                        <StyledButton lightHover={true}>kick</StyledButton>
+                    </>
+                )
+            }
             <StyledButtonIcon fontSize="1.6em" onClick={() => onChangeCardClick('messages')} iconType="comments" />
         </Container>
     );

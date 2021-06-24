@@ -5,7 +5,8 @@ const socket = require('socket.io');
 
 const initListeners = require('./listeners');
 
-const { users } = require('./data/data');
+const { users, rooms } = require('./data/data');
+const events = require('./events');
 
 const app = express();
 app.use(cors);
@@ -29,6 +30,27 @@ io.on('connection', socket => {
     initListeners(io, socket);
 
     users[socket.id] = null;
+
+
+    socket.on('disconnecting', () => {
+        const { sendRoomsListUpdate } = events;
+
+        const socketRoom = [...socket.rooms];
+        const roomId = socketRoom[1];
+
+        if (roomId && rooms[roomId]) {
+            const selectedRoom = rooms[roomId];
+            selectedRoom.activeUsers.forEach((user, index) => {
+                user[socket.id] && selectedRoom.activeUsers.splice(index, 1);
+            })
+
+            if (selectedRoom.activeUsers.length === 0) {
+                delete rooms[roomId];
+            }
+
+            sendRoomsListUpdate(io, socket);
+        }
+    })
 
     socket.on('disconnect', () => {
         delete users[socket.id];

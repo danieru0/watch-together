@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { useSocketContext } from '../../context/socketContext';
+
 import { ActiveUsers } from '../../types/types';
 
 import ChatMessages from '../molecules/ChatMessages';
@@ -13,6 +15,7 @@ interface IChat {
     activeUsers: ActiveUsers[];
     adminId: string;
     userId: string;
+    roomId: string;
 }
 
 const Container = styled.div`
@@ -21,7 +24,8 @@ const Container = styled.div`
     background: ${({theme}) => theme.primary};
 `
 
-const Chat = ({activeUsers, adminId, userId}: IChat) => {
+const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
+    const socket = useSocketContext();
     const [activeCard, setActiveCard] = useState('messages');
     const [selectedUserId, setSelectedUserId] = useState('');
 
@@ -32,6 +36,16 @@ const Chat = ({activeUsers, adminId, userId}: IChat) => {
     const handleUserClick = (clickedUserId: string) => {
         if (adminId === userId) {
             setSelectedUserId(clickedUserId);
+        }
+    }
+
+    const handleSetAdminClick = () => {
+
+    }
+
+    const handleKickClick = () => {
+        if (selectedUserId && socket && (adminId === userId)) {
+            socket.emit('requestKickFromRoom', roomId, selectedUserId);
         }
     }
 
@@ -46,7 +60,7 @@ const Chat = ({activeUsers, adminId, userId}: IChat) => {
                 ) : (
                     <>
                         <ChatUsers selectedUserId={selectedUserId} handleUserClick={handleUserClick} userId={userId} activeUsers={activeUsers} adminId={adminId} />
-                        <ChatSettings userId={userId} adminId={adminId} onChangeCardClick={handleChangeCardClick} />
+                        <ChatSettings onKickClick={handleKickClick} onAdminSetClick={handleSetAdminClick} userId={userId} adminId={adminId} onChangeCardClick={handleChangeCardClick} />
                     </>
                 )
             }

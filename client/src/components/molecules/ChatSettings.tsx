@@ -8,6 +8,8 @@ interface IChatSettings {
     userId: string;
     adminId: string;
     onChangeCardClick: (type: string) => void;
+    onAdminSetClick: () => void;
+    onKickClick: () => void;
 }
 
 const Container = styled.div`
@@ -29,14 +31,14 @@ const StyledButtonIcon = styled(ButtonIcon)`
     margin-left: auto;
 `
 
-const ChatSettings = ({userId, adminId, onChangeCardClick}: IChatSettings) => {
+const ChatSettings = ({userId, adminId, onChangeCardClick, onAdminSetClick, onKickClick}: IChatSettings) => {
     return (
         <Container>
             {
                 userId === adminId && (
                     <>
-                        <StyledButton lightHover={true}>set admin</StyledButton>
-                        <StyledButton lightHover={true}>kick</StyledButton>
+                        <StyledButton onClick={onAdminSetClick} lightHover={true}>set as admin</StyledButton>
+                        <StyledButton onClick={onKickClick} lightHover={true}>kick</StyledButton>
                     </>
                 )
             }

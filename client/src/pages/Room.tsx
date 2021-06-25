@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 
 import { selectAuth } from '../features/auth/authSlice';
@@ -38,6 +38,7 @@ const VideoWrapper = styled.div`
 const Room = () => {
     const socket = useSocketContext();
     const { id } = useParams<{id: string}>();
+    const history = useHistory();
     const authSelector = useAppSelector(selectAuth);
     const [activeUsers, setActiveUsers] = useState<ActiveUsers[]>([]);
     const [adminId, setAdminId] = useState('');
@@ -53,15 +54,25 @@ const Room = () => {
             socket.on('sendRoomCurrentAdminId', adminId => {
                 setAdminId(adminId);
             })
+
+            socket.on('sendKickFromRoomResponseUser', () => {
+                history.push('/kicked');
+            })
+           
+            socket.on('sendKickFromRoomResponseAdmin', () => {
+                alert('User kicked!');
+            })
         }
 
         return () => {
             if (socket) {
                 socket.off('sendRoomUsers');
                 socket.off('sendRoomCurrentAdminId');
+                socket.off('sendKickFromRoomResponseUser');
+                socket.off('sendKickFromRoomResponseAdmin')
             }
         }
-    }, [socket, id]);
+    }, [socket, id, history]);
 
     return (
         <Container>
@@ -69,7 +80,7 @@ const Room = () => {
                 <VideoNav />
                 <VideoWrapper>
                     <YoutubeVideo />
-                    <Chat userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
+                    <Chat roomId={id} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
                 </VideoWrapper>
             </Wrapper>
         </Container>

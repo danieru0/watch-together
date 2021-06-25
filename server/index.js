@@ -31,7 +31,6 @@ io.on('connection', socket => {
 
     users[socket.id] = null;
 
-
     socket.on('disconnecting', () => {
         const { sendRoomsListUpdate } = events;
 

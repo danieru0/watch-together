@@ -40,12 +40,16 @@ const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
     }
 
     const handleSetAdminClick = () => {
-
+        if (selectedUserId && socket && (adminId === userId)) {
+            socket.emit('requestAdminChange', roomId, selectedUserId);
+            setSelectedUserId('');
+        }
     }
 
     const handleKickClick = () => {
         if (selectedUserId && socket && (adminId === userId)) {
             socket.emit('requestKickFromRoom', roomId, selectedUserId);
+            setSelectedUserId('');
         }
     }
 

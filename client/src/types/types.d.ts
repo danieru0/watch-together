@@ -11,3 +11,8 @@ export interface RoomDataListInterface {
         id: string;
     }
 }
+
+export interface ChatMessage {
+    login: string;
+    message: string;
+}

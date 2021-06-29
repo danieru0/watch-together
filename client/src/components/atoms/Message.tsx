@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { ChatMessage } from '../../types/types';
+
+
 const Container = styled.li`
     display: flex;
     font-size: 1.2em;
@@ -16,11 +19,11 @@ const UserMessage = styled.span`
     margin-left: 5px;
 `
 
-const Message = () => {
+const Message = ({login, message}: ChatMessage) => {
     return (
         <Container>
-            <Nick>daniru0:</Nick>
-            <UserMessage>siema</UserMessage>
+            <Nick>{`${login}:`}</Nick>
+            <UserMessage>{message}</UserMessage>
         </Container>
     );
 };

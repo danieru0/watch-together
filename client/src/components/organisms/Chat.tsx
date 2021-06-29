@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useSocketContext } from '../../context/socketContext';
 
-import { ActiveUsers } from '../../types/types';
+import { ActiveUsers, ChatMessage } from '../../types/types';
 
 import ChatMessages from '../molecules/ChatMessages';
 import ChatInput from '../molecules/ChatInput';
@@ -28,6 +28,7 @@ const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
     const socket = useSocketContext();
     const [activeCard, setActiveCard] = useState('messages');
     const [selectedUserId, setSelectedUserId] = useState('');
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
 
     const handleChangeCardClick = (type: string) => {
         setActiveCard(type);
@@ -53,13 +54,29 @@ const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
         }
     }
 
+    const handleChatInput = (text: string) => {
+        if (socket) {
+            socket.emit('requestSendMessage', roomId, text);
+        }
+    }
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('sendMessage', data => {
+                setMessages(prev => [...prev, data])
+            })
+        }
+
+        return () => {socket && socket.off('sendMessage')}
+    }, [socket])
+
     return (
         <Container>
             {
                 activeCard === 'messages' ? (
                     <>
-                        <ChatMessages />
-                        <ChatInput onChangeCardClick={handleChangeCardClick} />
+                        <ChatMessages messages={messages} />
+                        <ChatInput onSubmit={handleChatInput} onChangeCardClick={handleChangeCardClick} />
                     </>
                 ) : (
                     <>

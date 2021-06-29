@@ -4,11 +4,13 @@ import { RootState } from '../../app/store';
 interface RoomState {
     passwordAfterCreation: string;
     roomIdFromLink: string;
+    roomName: string;
 }
 
 const initialState: RoomState = {
     passwordAfterCreation: '',
-    roomIdFromLink: ''
+    roomIdFromLink: '',
+    roomName: '',
 }
 
 export const roomSlice = createSlice({
@@ -20,11 +22,14 @@ export const roomSlice = createSlice({
         },
         setRoomIdFromLink: (state, action: PayloadAction<string>) => {
             state.roomIdFromLink = action.payload;
+        },
+        setRoomName: (state, action: PayloadAction<string>) => {
+            state.roomName = action.payload;
         }
     }
 })
 
-export const { setPasswordAfterCreation, setRoomIdFromLink } = roomSlice.actions;
+export const { setPasswordAfterCreation, setRoomIdFromLink, setRoomName } = roomSlice.actions;
 
 export const selectRoom = (state: RootState) => state.room;
 

@@ -6,6 +6,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { useSocketContext } from '../..//context/socketContext';
 
 import { selectAuth, setLogin } from '../../features/auth/authSlice';
+import { selectRoom } from '../../features/room/roomSlice';
 
 import ButtonIcon from '../atoms/ButtonIcon';
 
@@ -52,8 +53,7 @@ const Nav = () => {
     const socket = useSocketContext();
     const dispatch = useAppDispatch();
     const authSelector = useAppSelector(selectAuth);
-
-    const isInRoom = false;
+    const roomSelector = useAppSelector(selectRoom);
 
     const handleLogOutclick = () => {
         if (!socket) return false;
@@ -76,7 +76,7 @@ const Nav = () => {
                 </Logo>
             </Wrapper>
             <Wrapper>
-                { isInRoom && <RoomName>plplplpl</RoomName> }
+                { roomSelector.roomName && <RoomName>{roomSelector.roomName}</RoomName> }
             </Wrapper>
             <Wrapper>
                 {authSelector.login && <StyledButtonIcon onClick={handleLogOutclick} iconType="sign-out-alt"  />}

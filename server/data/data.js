@@ -12,8 +12,11 @@
             usersNumberMax: number from 2 to 6
             activeUsers: [
                 { userId: login }
-            ],
-            currentAdminId: id
+            ];
+            currentAdminId: id;
+            videoLink: string;
+            videoId: string | null;
+            videoType: string;
         }
     }
 */

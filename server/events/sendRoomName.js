@@ -1,4 +1,4 @@
-const sendRoomName = (io, socket, roomData, roomId) => {
+const sendRoomName = (io, socket, roomId, roomData) => {
     const roomName = roomData.name;
 
     io.to(roomId).emit('sendRoomName', roomName);

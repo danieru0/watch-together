@@ -5,10 +5,7 @@ module.exports = (io, socket) => {
     socket.on('requestSendMessage', (roomId, message) => {
         const { sendMessage } = events;
 
-        const socketRoom = [...socket.rooms];
-        const socketRoomId = socketRoom[1];
-
-        if (rooms[roomId] && roomId === socketRoomId) {
+        if (rooms[roomId]) {
             const userLogin = users[socket.id];
 
             sendMessage(io, socket, roomId, userLogin, message);

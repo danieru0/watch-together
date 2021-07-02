@@ -36,6 +36,10 @@ const VideoWrapper = styled.div`
     justify-content: space-between;
 `
 
+const ExtLink = styled.p`
+    font-size: 10em;
+`
+
 const Room = () => {
     const socket = useSocketContext();
     const { id } = useParams<{id: string}>();
@@ -44,6 +48,41 @@ const Room = () => {
     const authSelector = useAppSelector(selectAuth);
     const [activeUsers, setActiveUsers] = useState<ActiveUsers[]>([]);
     const [adminId, setAdminId] = useState('');
+    const [videoLink, setVideoLink] = useState('');
+    const [videoId, setVideoId] = useState('');
+    const [videoType, setVideoType] = useState('youtube');
+
+    const handleVideoLinkChange = (link: string, linkId: string) => {
+        if (socket) {
+            socket.emit('requestSetRoomVideoUrl', id, link, linkId);
+        }
+    }
+
+    const handleVideoTypeChange = (type: string) => {
+        if (socket) {
+            socket.emit('requestSetRoomVideoType', id, type);
+        }
+    }
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('sendRoomVideoUrl', (link, id) => {
+                setVideoLink(link);
+                setVideoId(id);
+            })
+
+            socket.on('sendRoomVideoType', type => {
+                setVideoType(type);
+            })
+        }
+
+        return () => {
+            if (socket) {
+                socket.off('sendRoomVideoUrl');
+                socket.off('sendRoomVideoType');
+            } 
+        }
+    }, [socket]);
 
     useEffect(() => {
         if (socket) {
@@ -51,7 +90,7 @@ const Room = () => {
 
             socket.on('sendRoomUsers', users => {
                 setActiveUsers(users);
-            });
+            })
 
             socket.on('sendRoomCurrentAdminId', adminId => {
                 setAdminId(adminId);
@@ -83,12 +122,22 @@ const Room = () => {
         }
     }, [socket, id, history, dispatch]);
 
+    const SwitchVideoComponent = (type: string) => {
+        switch(type) {
+            case 'youtube':
+                return <YoutubeVideo id={videoId} />
+            case 'extlink':
+                return <ExtLink>EXTERNAL LINK</ExtLink>
+            default: return '';
+        }
+    }
+
     return (
         <Container>
-            <Wrapper>                
-                <VideoNav />
+            <Wrapper>            
+                <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
                 <VideoWrapper>
-                    <YoutubeVideo />
+                    {SwitchVideoComponent(videoType)}
                     <Chat roomId={id} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
                 </VideoWrapper>
             </Wrapper>

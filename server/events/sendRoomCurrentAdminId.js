@@ -1,4 +1,4 @@
-const sendRoomCurrentAdminId = (io, socket, roomData, roomId) => {
+const sendRoomCurrentAdminId = (io, socket, roomId, roomData) => {
     const currentAdmin = roomData.currentAdminId;
 
     io.to(roomId).emit('sendRoomCurrentAdminId', currentAdmin);

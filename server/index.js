@@ -27,6 +27,19 @@ const server = express()
 const io = socket(server);
 
 io.on('connection', socket => {
+    socket.use((packet, next) => {
+        const roomId = packet[1];
+        const socketRoom = [...socket.rooms];
+        const socketRoomId = socketRoom[1];
+
+        if (!rooms[roomId]) return next();
+        if (!socketRoomId) return next();
+
+        if (roomId === socketRoomId) return next();
+        
+        next(new Error("That's illegal!"));
+    });
+
     initListeners(io, socket);
 
     users[socket.id] = null;

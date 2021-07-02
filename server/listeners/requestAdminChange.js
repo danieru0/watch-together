@@ -11,7 +11,7 @@ module.exports = (io, socket) => {
             if (selectedRoom.currentAdminId === socket.id) {
                 selectedRoom.currentAdminId = userId;
 
-                sendRoomCurrentAdminId(io, socket, selectedRoom, roomId);
+                sendRoomCurrentAdminId(io, socket, roomId, selectedRoom);
             }
         }
     })

@@ -15,7 +15,10 @@ module.exports = (io, socket) => {
                 adminControl: values.adminControl,
                 usersNumberMax: values.usersNumber,
                 activeUsers: [],
-                currentAdminId: socket.id
+                currentAdminId: socket.id,
+                videoLink: '',
+                videoId: '',
+                videoType: 'youtube'
             }
 
             sendRoomCreationStatus(io, socket, id);

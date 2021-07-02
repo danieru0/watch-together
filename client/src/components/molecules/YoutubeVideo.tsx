@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+interface IYoutubeVideo {
+    id: string;
+}
+
 const Container = styled.div`
     width: 60%;
     height: 100%;
@@ -16,7 +20,7 @@ const NoVideoText = styled.span`
     letter-spacing: 1px;
 `
 
-const YoutubeVideo = () => {
+const YoutubeVideo = ({id}: IYoutubeVideo) => {
     return (
         <Container>
             <NoVideoText>The video hasn't been set yet</NoVideoText>

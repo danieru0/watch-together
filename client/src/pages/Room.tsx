@@ -11,8 +11,8 @@ import { useSocketContext } from '../context/socketContext';
 import { ActiveUsers } from '../types/types';
 
 import VideoNav from '../components/molecules/VideoNav'
-import YoutubeVideo from '../components/molecules/YoutubeVideo';
 import Chat from '../components/organisms/Chat';
+import Video from '../components/organisms/Video';
 
 const Container = styled.div`
     flex: 1;
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     flex-direction: column;
 `
 
-const VideoWrapper = styled.div`
+const RoomContent = styled.div`
     width: 100%;
     display: flex;
     height: 100%;
@@ -36,8 +36,20 @@ const VideoWrapper = styled.div`
     justify-content: space-between;
 `
 
-const ExtLink = styled.p`
-    font-size: 10em;
+const VideoWrapper = styled.div`
+    width: 60%;
+    height: 100%;
+    background: ${({theme}) => theme.primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`
+
+const NoVideoText = styled.span`
+    color: ${({theme}) => theme.fontcolorSecondary};
+    text-transform: uppercase;
+    letter-spacing: 1px;
 `
 
 const Room = () => {
@@ -49,8 +61,6 @@ const Room = () => {
     const [activeUsers, setActiveUsers] = useState<ActiveUsers[]>([]);
     const [adminId, setAdminId] = useState('');
     const [videoLink, setVideoLink] = useState('');
-    const [videoId, setVideoId] = useState('');
-    const [videoType, setVideoType] = useState('youtube');
 
     const handleVideoLinkChange = (link: string, linkId: string) => {
         if (socket) {
@@ -66,20 +76,14 @@ const Room = () => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('sendRoomVideoUrl', (link, id) => {
+            socket.on('sendRoomVideoUrl', (link) => {
                 setVideoLink(link);
-                setVideoId(id);
-            })
-
-            socket.on('sendRoomVideoType', type => {
-                setVideoType(type);
             })
         }
 
         return () => {
             if (socket) {
                 socket.off('sendRoomVideoUrl');
-                socket.off('sendRoomVideoType');
             } 
         }
     }, [socket]);
@@ -122,24 +126,16 @@ const Room = () => {
         }
     }, [socket, id, history, dispatch]);
 
-    const SwitchVideoComponent = (type: string) => {
-        switch(type) {
-            case 'youtube':
-                return <YoutubeVideo id={videoId} />
-            case 'extlink':
-                return <ExtLink>EXTERNAL LINK</ExtLink>
-            default: return '';
-        }
-    }
-
     return (
         <Container>
             <Wrapper>            
                 <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
-                <VideoWrapper>
-                    {SwitchVideoComponent(videoType)}
+                <RoomContent>
+                    <VideoWrapper>
+                        {videoLink ? <Video roomId={id} videoLink={videoLink} /> : <NoVideoText>The video hasn't been set yet</NoVideoText>}
+                    </VideoWrapper>
                     <Chat roomId={id} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
-                </VideoWrapper>
+                </RoomContent>
             </Wrapper>
         </Container>
     );

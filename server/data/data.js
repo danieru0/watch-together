@@ -17,6 +17,8 @@
             videoLink: string;
             videoId: string | null;
             videoType: string;
+            videoDurationSeconds: number;
+            videoPlaying: boolean;
         }
     }
 */

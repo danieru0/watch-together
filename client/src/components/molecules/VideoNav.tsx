@@ -56,9 +56,8 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, videoLink, userId, admi
     }
 
     const handleVideoTypeClick = (type: string) => {
-        setVideoTypeClicked(type);
-
         if (window.confirm("Are you sure?")) {
+            setVideoTypeClicked(type);
             onVideoLinkChange('', '');
             onVideoTypeChange(type);
         }

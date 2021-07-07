@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faLock, faPause, faPlay, faVolumeUp, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { faYoutubeSquare, faStickerMule } from '@fortawesome/free-brands-svg-icons';
 import { io, Socket } from 'socket.io-client';
 
@@ -21,7 +21,7 @@ import Kicked from './pages/Kicked';
 import Modal from './components/organisms/Modal';
 import Nav from './components/organisms/Nav';
 
-library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faLock, faYoutubeSquare, faStickerMule);
+library.add(faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faLock, faPause, faPlay, faVolumeUp, faExpand, faYoutubeSquare, faStickerMule);
 
 const WithoutLoginComponent = WithoutLogin(Login);
 const WithLoginCreateComponent = WithLogin(Create);

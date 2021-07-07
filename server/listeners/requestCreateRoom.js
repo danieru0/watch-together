@@ -18,7 +18,9 @@ module.exports = (io, socket) => {
                 currentAdminId: socket.id,
                 videoLink: '',
                 videoId: '',
-                videoType: 'youtube'
+                videoType: 'youtube',
+                videoDurationSeconds: 0,
+                videoPlaying: false
             }
 
             sendRoomCreationStatus(io, socket, id);

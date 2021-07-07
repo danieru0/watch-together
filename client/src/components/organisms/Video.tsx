@@ -26,6 +26,7 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
         height: '0px',
     });
     const [videoIsPlaying, setVideoIsPlaying] = useState(false);
+    const [socketPlayingStatus, setSocketPlayingStatus] = useState(false);
     const [videoProgress, setVideoProgress] = useState(0);
     const [videoLengthSeconds, setVideoLengthSeconds] = useState(0);
 
@@ -66,6 +67,7 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     useEffect(() => {
         if (socket) {
             socket.on('sendRoomVideoStatus', data => {
+                setSocketPlayingStatus(data.playing);
                 setVideoIsPlaying(data.playing);
                 setVideoProgress(data.progress);
             })
@@ -78,6 +80,20 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
         }
     })
 
+    const handlePause = () => {
+        setVideoIsPlaying(false);
+        if (socketPlayingStatus) {
+            setVideoIsPlaying(true);
+        }
+    }
+
+    const handlePlay = () => {
+        setVideoIsPlaying(true);
+        if (!socketPlayingStatus) {
+            setVideoIsPlaying(false);
+        }
+    }
+
     return (
         <Container ref={ContainerRef}>
             <ReactPlayer 
@@ -89,8 +105,10 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
                 playing={videoIsPlaying}
                 onProgress={handleProgress}
                 onDuration={handleDuration}
+                onPause={handlePause}
+                onPlay={handlePlay}
             />
-            <VideoControls videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
+            <VideoControls playing={videoIsPlaying} videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
         </Container>
     );
 };

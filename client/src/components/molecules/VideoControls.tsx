@@ -8,6 +8,7 @@ import ButtonIcon from '../atoms/ButtonIcon';
 interface IVideoControls {
     videoLengthSeconds: number;
     videoProgress: number;
+    playing: boolean;
     onPlayClick: () => void;
     onMuteClick: () => void;
     onFullScreenClick: () => void;
@@ -79,7 +80,7 @@ const StyledButtonFullScreen = styled(ButtonIcon)`
     margin-left: auto;
 `
 
-const VideoControls = ({videoLengthSeconds, videoProgress, onPlayClick, onMuteClick, onFullScreenClick}: IVideoControls) => {
+const VideoControls = ({videoLengthSeconds, videoProgress, playing, onPlayClick, onMuteClick, onFullScreenClick}: IVideoControls) => {
     const [isProgressSliderTrigged, setIsProgressSliderTrigged] = useState(false);
     const [progressSliderValue, setProgressSliderValue] = useState(0);
     
@@ -97,7 +98,7 @@ const VideoControls = ({videoLengthSeconds, videoProgress, onPlayClick, onMuteCl
     return (
         <Container>
             <LeftControlsWrapper>
-                <ButtonIcon fontSize="1.2em" onClick={onPlayClick} iconType="play" />
+                <ButtonIcon fontSize="1.2em" onClick={onPlayClick} iconType={playing ? 'pause' : 'play'} />
                 <ButtonIcon fontSize="1.2em" onClick={onMuteClick} iconType="volume-up" />
                 <StyledSliderVolume min={0} max={100} step={1} />
             </LeftControlsWrapper>

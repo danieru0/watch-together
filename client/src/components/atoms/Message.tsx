@@ -16,6 +16,7 @@ const Nick = styled.span`
 
 const UserMessage = styled.span`
     color: ${({theme}) => theme.fontColorPrimary};
+    word-break: break-all;
     margin-left: 5px;
 `
 

@@ -12,12 +12,13 @@ interface IChatMessages {
 const Container = styled.div`
     width: 100%;
     height: 85%;
-    overflow-y: auto;
     padding: 5px 10px;
+    overflow-y: auto;
 `
 
 const List = styled.ul`
     list-style: none;
+    height: 100px;
 `
 
 const ChatMessages = ({messages}: IChatMessages) => {

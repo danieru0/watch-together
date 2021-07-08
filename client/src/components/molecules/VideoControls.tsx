@@ -9,9 +9,12 @@ interface IVideoControls {
     videoLengthSeconds: number;
     videoProgress: number;
     playing: boolean;
-    onPlayClick: () => void;
+    videoVolume: number;
+    muted: boolean;
     onMuteClick: () => void;
+    onPlayClick: () => void;
     onFullScreenClick: () => void;
+    onVolumeChange: (value: number) => void;
 }
 
 const Container = styled.div`
@@ -80,7 +83,12 @@ const StyledButtonFullScreen = styled(ButtonIcon)`
     margin-left: auto;
 `
 
-const VideoControls = ({videoLengthSeconds, videoProgress, playing, onPlayClick, onMuteClick, onFullScreenClick}: IVideoControls) => {
+const StyledVolumeButton = styled(ButtonIcon)`
+    width: 24.3px;
+    text-align: center;
+`
+
+const VideoControls = ({videoLengthSeconds, videoProgress, playing, videoVolume, muted, onPlayClick, onMuteClick, onFullScreenClick, onVolumeChange}: IVideoControls) => {
     const [isProgressSliderTrigged, setIsProgressSliderTrigged] = useState(false);
     const [progressSliderValue, setProgressSliderValue] = useState(0);
     
@@ -99,8 +107,8 @@ const VideoControls = ({videoLengthSeconds, videoProgress, playing, onPlayClick,
         <Container>
             <LeftControlsWrapper>
                 <ButtonIcon fontSize="1.2em" onClick={onPlayClick} iconType={playing ? 'pause' : 'play'} />
-                <ButtonIcon fontSize="1.2em" onClick={onMuteClick} iconType="volume-up" />
-                <StyledSliderVolume min={0} max={100} step={1} />
+                <StyledVolumeButton fontSize="1.2em" onClick={onMuteClick} iconType={muted ? 'volume-mute' : 'volume-up'} />
+                <StyledSliderVolume onChange={onVolumeChange} value={videoVolume} min={0} max={1} step={0.1} />
             </LeftControlsWrapper>
             <ProgressBarWrapper>
                 <StyledSliderProgress onChange={handleChange} onAfterChange={handleAfterChange} onBeforeChange={() => setIsProgressSliderTrigged(true)} value={isProgressSliderTrigged ? progressSliderValue : videoProgress} min={0} max={videoLengthSeconds} step={1} />

@@ -29,6 +29,8 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     const [socketPlayingStatus, setSocketPlayingStatus] = useState(false);
     const [videoProgress, setVideoProgress] = useState(0);
     const [videoLengthSeconds, setVideoLengthSeconds] = useState(0);
+    const [videoVolume, setVideoVolume] = useState(0.50);
+    const [videoMuted, setVideoMuted] = useState(false);
 
     const handleOnReady = () => {
         if (ContainerRef && ContainerRef.current && videoDimensions.width === '0px' && videoDimensions.height === '0px') {
@@ -49,7 +51,11 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     }
 
     const handleMuteClick = () => {
+        setVideoMuted(prev => !prev);
+    }
 
+    const handleVolumeChange = (value: number) => {
+        setVideoVolume(value);
     }
 
     const handleFullScreenClick = () => {
@@ -103,12 +109,14 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
                 width={videoDimensions.width}
                 height={videoDimensions.height}
                 playing={videoIsPlaying}
+                volume={videoVolume}
+                muted={videoMuted}
                 onProgress={handleProgress}
                 onDuration={handleDuration}
                 onPause={handlePause}
                 onPlay={handlePlay}
             />
-            <VideoControls playing={videoIsPlaying} videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
+            <VideoControls muted={videoMuted} videoVolume={videoVolume} playing={videoIsPlaying} videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onVolumeChange={handleVolumeChange} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
         </Container>
     );
 };

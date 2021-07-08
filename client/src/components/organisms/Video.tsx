@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player'
+import { BaseReactPlayerProps } from 'react-player/base'
 
 import { useSocketContext } from '../../context/socketContext';
 
@@ -21,6 +22,7 @@ const Container = styled.div`
 const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     const socket = useSocketContext();
     const ContainerRef = useRef<HTMLDivElement>(null);
+    const PlayerRef = useRef(null);
     const [videoDimensions, setVideoDimensions] = useState({
         width: '0px',
         height: '0px',
@@ -31,6 +33,8 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     const [videoLengthSeconds, setVideoLengthSeconds] = useState(0);
     const [videoVolume, setVideoVolume] = useState(0.50);
     const [videoMuted, setVideoMuted] = useState(false);
+    const [isProgressSliderTrigged, setIsProgressSliderTrigged] = useState(false);
+    const [progressSliderSocketActive, setProgressSliderSocketActive] = useState(false);
 
     const handleOnReady = () => {
         if (ContainerRef && ContainerRef.current && videoDimensions.width === '0px' && videoDimensions.height === '0px') {
@@ -63,7 +67,9 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     }
 
     const handleProgress = (state: any) => {
-        setVideoProgress(state.playedSeconds);
+        if (isProgressSliderTrigged === false && progressSliderSocketActive === false) {
+            setVideoProgress(state.playedSeconds);
+        }
     }
 
     const handleDuration = (duration: number) => {
@@ -76,12 +82,24 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
                 setSocketPlayingStatus(data.playing);
                 setVideoIsPlaying(data.playing);
                 setVideoProgress(data.progress);
+            });
+
+            socket.on('sendRoomVideoDuration', duration => {
+                if (PlayerRef && PlayerRef.current) {
+                    const currentPlayerRef = PlayerRef.current! as BaseReactPlayerProps;
+                    
+                    setVideoProgress(duration);
+                    currentPlayerRef.seekTo(duration);
+                    setProgressSliderSocketActive(false);
+                    setIsProgressSliderTrigged(false);
+                }
             })
         }
 
         return () => {
             if (socket) {
                 socket.off('sendRoomVideoStatus');
+                socket.off('sendRoomVideoDuration');
             }
         }
     })
@@ -100,9 +118,29 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
         }
     }
 
+    const handleOnProgressSliderBeforeChange = () => {
+        setIsProgressSliderTrigged(true);
+    }
+
+    const handleOnProgressSliderAfterChange = (value: number) => {
+        if (socket && isProgressSliderTrigged && progressSliderSocketActive === false) {
+            setProgressSliderSocketActive(true);
+            setVideoProgress(value);
+
+            socket.emit('requestRoomChangeVideoDuration', roomId, value);
+        }
+    }
+
+    const handleProgressSliderChange = (value: number) => {
+        if (isProgressSliderTrigged && progressSliderSocketActive === false) {
+            setVideoProgress(value);
+        }
+    }
+
     return (
         <Container ref={ContainerRef}>
             <ReactPlayer 
+                ref={PlayerRef}
                 url={videoLink}
                 controls={false}
                 onReady={handleOnReady}
@@ -116,7 +154,7 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
                 onPause={handlePause}
                 onPlay={handlePlay}
             />
-            <VideoControls muted={videoMuted} videoVolume={videoVolume} playing={videoIsPlaying} videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onVolumeChange={handleVolumeChange} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
+            <VideoControls muted={videoMuted} videoVolume={videoVolume} playing={videoIsPlaying} onProgressSliderChange={handleProgressSliderChange} onProgressSliderAfterChange={handleOnProgressSliderAfterChange} onProgressSliderBeforeChange={handleOnProgressSliderBeforeChange} videoProgress={videoProgress} videoLengthSeconds={videoLengthSeconds} onVolumeChange={handleVolumeChange} onPlayClick={handlePlayClick} onMuteClick={handleMuteClick} onFullScreenClick={handleFullScreenClick} />
         </Container>
     );
 };

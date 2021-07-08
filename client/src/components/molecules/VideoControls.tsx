@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -15,6 +15,9 @@ interface IVideoControls {
     onPlayClick: () => void;
     onFullScreenClick: () => void;
     onVolumeChange: (value: number) => void;
+    onProgressSliderBeforeChange: (value: number) => void;
+    onProgressSliderAfterChange: (value: number) => void;
+    onProgressSliderChange: (value: number) => void;
 }
 
 const Container = styled.div`
@@ -88,21 +91,7 @@ const StyledVolumeButton = styled(ButtonIcon)`
     text-align: center;
 `
 
-const VideoControls = ({videoLengthSeconds, videoProgress, playing, videoVolume, muted, onPlayClick, onMuteClick, onFullScreenClick, onVolumeChange}: IVideoControls) => {
-    const [isProgressSliderTrigged, setIsProgressSliderTrigged] = useState(false);
-    const [progressSliderValue, setProgressSliderValue] = useState(0);
-    
-    const handleChange = (value: number) => {
-        if (isProgressSliderTrigged) {
-            setProgressSliderValue(value);
-        }
-    }
-
-    const handleAfterChange = (value: number) => {
-        setIsProgressSliderTrigged(false);
-        setProgressSliderValue(value);
-    }
-
+const VideoControls = ({videoLengthSeconds, videoProgress, playing, videoVolume, muted, onPlayClick, onMuteClick, onFullScreenClick, onVolumeChange, onProgressSliderBeforeChange, onProgressSliderAfterChange, onProgressSliderChange}: IVideoControls) => {
     return (
         <Container>
             <LeftControlsWrapper>
@@ -111,7 +100,7 @@ const VideoControls = ({videoLengthSeconds, videoProgress, playing, videoVolume,
                 <StyledSliderVolume onChange={onVolumeChange} value={videoVolume} min={0} max={1} step={0.1} />
             </LeftControlsWrapper>
             <ProgressBarWrapper>
-                <StyledSliderProgress onChange={handleChange} onAfterChange={handleAfterChange} onBeforeChange={() => setIsProgressSliderTrigged(true)} value={isProgressSliderTrigged ? progressSliderValue : videoProgress} min={0} max={videoLengthSeconds} step={1} />
+                <StyledSliderProgress onChange={onProgressSliderChange} onAfterChange={onProgressSliderAfterChange} onBeforeChange={onProgressSliderBeforeChange} value={videoProgress} min={0} max={videoLengthSeconds} step={1} />
             </ProgressBarWrapper>
             <RightControlsWrapper>
                 <StyledButtonFullScreen fontSize="1.2em" onClick={onFullScreenClick} iconType="expand" />

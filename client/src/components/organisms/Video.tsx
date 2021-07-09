@@ -63,7 +63,20 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     }
 
     const handleFullScreenClick = () => {
-
+        if (ContainerRef && ContainerRef.current) {
+            if (!document.fullscreenElement) {
+                ContainerRef.current.requestFullscreen().then(() => {
+                    setVideoDimensions({
+                        width: `100%`,
+                        height: `100%` 
+                    })
+                }).catch(err => {
+                    alert(`Error while attempting to enable fullscreen mode: ${err.message}`);
+                })
+            } else {
+                document.exitFullscreen();
+            }
+        }
     }
 
     const handleProgress = (state: any) => {

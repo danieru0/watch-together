@@ -111,6 +111,12 @@ const Room = () => {
             socket.on('sendRoomName', roomName => {
                 dispatch(setRoomName(roomName));
             })
+
+            socket.on('sendPlayingStatusToClient', playing => {
+                if (playing) {
+                    socket.emit('requestCurrentProgressFromActiveSocket', id);
+                }
+            })
         }
 
         return () => {
@@ -120,6 +126,7 @@ const Room = () => {
                 socket.off('sendKickFromRoomResponseUser');
                 socket.off('sendKickFromRoomResponseAdmin');
                 socket.off('sendRoomName');
+                socket.off('sendPlayingStatusToClient');
 
                 dispatch(setRoomName(''));
             }

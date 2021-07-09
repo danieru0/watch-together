@@ -106,6 +106,23 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
                     setProgressSliderSocketActive(false);
                     setIsProgressSliderTrigged(false);
                 }
+            });
+
+            socket.on('sendGetCurrentProgressFromSocket', requester => {
+                socket.emit('requestGiveRequesterCurrentProgress', {
+                    requester: requester,
+                    progress: videoProgress
+                })
+            });
+
+            socket.on('sendCurrentProgressToRequester', progress => {
+                if (PlayerRef && PlayerRef.current) {
+                    const currentPlayerRef = PlayerRef.current! as BaseReactPlayerProps;
+                    setSocketPlayingStatus(true);
+                    currentPlayerRef.seekTo(progress);
+                    setVideoIsPlaying(true);
+                    setVideoProgress(progress);
+                }
             })
         }
 
@@ -113,6 +130,8 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
             if (socket) {
                 socket.off('sendRoomVideoStatus');
                 socket.off('sendRoomVideoDuration');
+                socket.off('sendGetCurrentProgressFromSocket');
+                socket.off('sendCurrentProgressToRequester');
             }
         }
     })

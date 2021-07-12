@@ -52,6 +52,12 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, videoLink, userId, admi
             if (videoInfo && videoInfo.provider === videoTypeClicked) {
                 onVideoLinkChange(link, videoInfo.id);
             }
+        } else {
+            const videoInfo = urlParser.parse(link);
+
+            if (videoInfo === undefined) {
+                onVideoLinkChange(link, 'id');
+            }
         }
     }
 

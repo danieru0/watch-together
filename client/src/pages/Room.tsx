@@ -61,6 +61,7 @@ const Room = () => {
     const [activeUsers, setActiveUsers] = useState<ActiveUsers[]>([]);
     const [adminId, setAdminId] = useState('');
     const [videoLink, setVideoLink] = useState('');
+    const [videoType, setVideoType] = useState('youtube');
 
     const handleVideoLinkChange = (link: string, linkId: string) => {
         if (socket) {
@@ -76,14 +77,19 @@ const Room = () => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('sendRoomVideoUrl', (link) => {
+            socket.on('sendRoomVideoUrl', link => {
                 setVideoLink(link);
+            })
+
+            socket.on('sendRoomVideoType', type => {
+                setVideoType(type);
             })
         }
 
         return () => {
             if (socket) {
                 socket.off('sendRoomVideoUrl');
+                socket.off('sendRoomVideoType');
             } 
         }
     }, [socket]);
@@ -139,7 +145,7 @@ const Room = () => {
                 <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
                 <RoomContent>
                     <VideoWrapper>
-                        {videoLink ? <Video roomId={id} videoLink={videoLink} /> : <NoVideoText>The video hasn't been set yet</NoVideoText>}
+                        {videoLink ? <Video videoType={videoType} roomId={id} videoLink={videoLink} /> : <NoVideoText>The video hasn't been set yet</NoVideoText>}
                     </VideoWrapper>
                     <Chat roomId={id} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
                 </RoomContent>

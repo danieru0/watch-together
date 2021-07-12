@@ -10,6 +10,7 @@ import VideoControls from '../molecules/VideoControls';
 interface IYoutubeVideo {
     videoLink: string;
     roomId: string;
+    videoType: string;
 }
 
 const Container = styled.div`
@@ -19,7 +20,7 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
+const YoutubeVideo = ({videoLink, videoType, roomId}: IYoutubeVideo) => {
     const socket = useSocketContext();
     const ContainerRef = useRef<HTMLDivElement>(null);
     const PlayerRef = useRef(null);
@@ -35,6 +36,7 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
     const [videoMuted, setVideoMuted] = useState(false);
     const [isProgressSliderTrigged, setIsProgressSliderTrigged] = useState(false);
     const [progressSliderSocketActive, setProgressSliderSocketActive] = useState(false);
+    const [videoProgressForExtLink, setVideoProgressForExtLink] = useState(0);
 
     const handleOnReady = () => {
         if (ContainerRef && ContainerRef.current && videoDimensions.width === '0px' && videoDimensions.height === '0px') {
@@ -118,10 +120,15 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
             socket.on('sendCurrentProgressToRequester', progress => {
                 if (PlayerRef && PlayerRef.current) {
                     const currentPlayerRef = PlayerRef.current! as BaseReactPlayerProps;
-                    setSocketPlayingStatus(true);
-                    currentPlayerRef.seekTo(progress);
-                    setVideoIsPlaying(true);
+                    
                     setVideoProgress(progress);
+                    setSocketPlayingStatus(true);
+                    setVideoIsPlaying(true);
+                    currentPlayerRef.seekTo(progress);
+                    
+                    if (videoType === 'extlink') {
+                        setVideoProgressForExtLink(progress);
+                    }
                 }
             })
         }
@@ -147,6 +154,14 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
         setVideoIsPlaying(true);
         if (!socketPlayingStatus) {
             setVideoIsPlaying(false);
+        } else {
+            if (videoProgressForExtLink) {
+                const currentPlayerRef = PlayerRef.current! as BaseReactPlayerProps;
+
+                setTimeout(() => {
+                    currentPlayerRef.seekTo(videoProgressForExtLink);
+                }, 2000);
+            }
         }
     }
 
@@ -168,6 +183,10 @@ const YoutubeVideo = ({videoLink, roomId}: IYoutubeVideo) => {
             setVideoProgress(value);
         }
     }
+
+    useEffect(() => {
+        setVideoProgressForExtLink(0);
+    }, [videoType])
 
     return (
         <Container ref={ContainerRef}>

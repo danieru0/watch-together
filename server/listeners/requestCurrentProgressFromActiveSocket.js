@@ -7,9 +7,9 @@ module.exports = (io, socket) => {
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
-            const firstSocketInRoomId = Object.keys(selectedRoom.activeUsers[0])[0];
+            const currentAdminSocketId = selectedRoom.currentAdminId;
             
-            sendGetCurrentProgressFromSocket(io, socket, firstSocketInRoomId);
+            sendGetCurrentProgressFromSocket(io, socket, currentAdminSocketId);
         }
     })
 }

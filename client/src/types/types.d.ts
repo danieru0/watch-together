@@ -12,6 +12,13 @@ export interface RoomDataListInterface {
     }
 }
 
+export interface BasicRoomData {
+    adminControl: boolean;
+    usersNumberMax: number;
+    type: RoomType;
+    roomName: string;
+}
+
 export interface ChatMessage {
     login: string;
     message: string;

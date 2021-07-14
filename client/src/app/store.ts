@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import roomReducer from '../features/room/roomSlice';
+import modalReducer from '../features/modal/modalSlice';
 
 export const store = configureStore({
   	reducer: {
 		  auth: authReducer,
-		  room: roomReducer
+		  room: roomReducer,
+		  modal: modalReducer
   	},
 });
 

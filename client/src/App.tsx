@@ -53,12 +53,10 @@ function App() {
 		setSocket(socket);
 	}, [])
 
-	const isModalActive = false;
-
 	return (
 		<GlobalContainer>
 			<socketContext.Provider value={socket}>
-				{isModalActive && <Modal />}
+				<Modal />
 				<Nav />
 				<GlobalWrapper>
 					<Switch>

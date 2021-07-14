@@ -1,8 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { useSocketContext } from '../../context/socketContext';
+
 import FormikRoom, { InitialValues } from './FormikRoom';
 import ButtonIcon from '../atoms/ButtonIcon';
+
+import { BasicRoomData } from '../../types/types';
+
+interface IRoomSettingsModal {
+    basicRoomData: BasicRoomData | null
+    roomId: string;
+    onCloseClick: () => void;
+}
 
 const Container = styled.div`
     background: ${({theme}) => theme.secondary};
@@ -16,19 +26,26 @@ const StyledButtonIcon = styled(ButtonIcon)`
     right: -14px;
 `
 
-const RoomSettingsModal = () => {
-    const handleCloseModalButton = () => {
-
-    }
-
+const RoomSettingsModal = ({basicRoomData, roomId, onCloseClick}: IRoomSettingsModal) => {
+    const socket = useSocketContext();
+    
     const handleSettingsSubmit = (values: InitialValues) => {
-        console.log(handleSettingsSubmit);
+        if (!socket) return false;
+
+        socket.emit('requestRoomSettingsUpdate', roomId, {
+            adminControl: values.adminControl,
+            usersNumberMax: values.usersNumber,
+            type: values.type,
+            roomName: values.roomName
+        });
+
+        onCloseClick();
     }
 
     return (
         <Container>
-            <StyledButtonIcon fontSize="1.5em" onClick={handleCloseModalButton} iconType="times" />
-            <FormikRoom onSubmit={handleSettingsSubmit} formikType="settings" />
+            <StyledButtonIcon fontSize="1.5em" onClick={onCloseClick} iconType="times" />
+            <FormikRoom basicRoomData={basicRoomData} onSubmit={handleSettingsSubmit} formikType="settings" />
         </Container>
     );
 };

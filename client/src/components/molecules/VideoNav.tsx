@@ -8,6 +8,7 @@ import ButtonIcon from '../atoms/ButtonIcon';
 interface IVideoNav {
     onVideoLinkChange: (link: string, id: string) => void;
     onVideoTypeChange: (type: string) => void;
+    onSettingsClick: () => void;
     videoLink: string;
     userId: string;
     adminId: string;
@@ -40,7 +41,7 @@ const NotLoggedLink = styled.span`
     text-align: center;
 `
 
-const VideoNav = ({onVideoLinkChange, onVideoTypeChange, videoLink, userId, adminId}: IVideoNav) => {
+const VideoNav = ({onVideoLinkChange, onVideoTypeChange, onSettingsClick, videoLink, userId, adminId}: IVideoNav) => {
     const [videoTypeClicked, setVideoTypeClicked] = useState('youtube');
 
     const handleVideoLinkSubmit = (link: string) => {
@@ -69,10 +70,6 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, videoLink, userId, admi
         }
     }
 
-    const handleSettingsClick = () => {
-
-    }
-
     return (
         <Container>
             {
@@ -81,7 +78,7 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, videoLink, userId, admi
                         <VideoLink onSubmit={handleVideoLinkSubmit}/>
                         <StyledButtonIcon fontSize="2em" isLogoIcon={true} iconType="youtube-square" fontColor={videoTypeClicked === 'youtube' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('youtube')} />
                         <StyledButtonIcon fontSize="2em" iconType="external-link-square-alt" fontColor={videoTypeClicked === 'extlink' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('extlink')} />
-                        <StyledSettingsButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={handleSettingsClick} />
+                        <StyledSettingsButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={onSettingsClick} />
                     </>
                 ) : (
                     <NotLoggedLink>{videoLink ? videoLink : 'VIDEO IS NOT SET YET'}</NotLoggedLink>

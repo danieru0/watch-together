@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -9,14 +9,15 @@ import Input from '../atoms/Input';
 import CheckRadioButton from '../atoms/CheckRadioButton';
 import Button from '../atoms/Button';
 
+import { BasicRoomData } from '../../types/types';
+
 const CreateSchema = Yup.object().shape({
     roomName: Yup.string().min(4, 'Too short').max(15, 'Too long').required('Required!'),
     password: Yup.string()
 })
 
 const SettingsSchema = Yup.object().shape({
-    roomName: Yup.string(),
-    password: Yup.string().required('Required!')
+    roomName: Yup.string().min(4, 'Too short').max(15, 'Too long').required('Required!'),
 })
 
 export interface InitialValues {
@@ -30,6 +31,7 @@ export interface InitialValues {
 interface IFormikRoom {
     formikType: 'create' | 'settings';
     submitted?: boolean;
+    basicRoomData?: BasicRoomData | null;
     onSubmit: (values: InitialValues, formikType: string) => void;
 }
 
@@ -103,7 +105,7 @@ const StyledButton = styled(Button)`
     margin: 0px 10px;
 `
 
-const Create = ({formikType, submitted, onSubmit}: IFormikRoom) => {
+const Create = ({formikType, basicRoomData, submitted, onSubmit}: IFormikRoom) => {
     const initialValues: InitialValues = {
         roomName: '',
         password: '',
@@ -112,10 +114,20 @@ const Create = ({formikType, submitted, onSubmit}: IFormikRoom) => {
         usersNumber: 2
     }
 
+    useEffect(() => {
+        if (basicRoomData) {
+            initialValues.type = basicRoomData.type;
+            initialValues.adminControl = basicRoomData.adminControl;
+            initialValues.usersNumber = basicRoomData.usersNumberMax;
+            initialValues.roomName = basicRoomData.roomName;
+        }
+    }, [basicRoomData]); //eslint-disable-line
+
     return (
         <Container>
             <Formik
                 initialValues={initialValues}
+                enableReinitialize={true}
                 validationSchema={formikType === 'create' ? CreateSchema : SettingsSchema}
                 onSubmit={values => {
                     onSubmit(values, formikType);
@@ -123,8 +135,8 @@ const Create = ({formikType, submitted, onSubmit}: IFormikRoom) => {
             >
                 {({values, errors, handleChange, setFieldValue}) => (
                     <StyledForm>
-                        {formikType === 'create' && <StyledInput onChange={handleChange} value={values.roomName} error={errors.roomName && errors.roomName} name="roomName" labelText="Room name" /> }
-                        <StyledInput onChange={handleChange} type="password" value={values.password} error={errors.password && errors.password} name="password" labelText="Password" />
+                        <StyledInput onChange={handleChange} value={values.roomName} error={errors.roomName && errors.roomName} name="roomName" labelText="Room name" />
+                        {formikType === 'create' && <StyledInput onChange={handleChange} type="password" value={values.password} error={errors.password && errors.password} name="password" labelText="Password" />}
                         <Wrapper>
                             <StyledCheckRadioButton onChange={handleChange} name="type" type="radio" id="type-radio-public" label="public" value="public" checked={values.type === 'public'} />
                             <StyledCheckRadioButton onChange={handleChange} name="type" type="radio" id="type-radio-private" label="private" value="private" checked={values.type === 'private'} />

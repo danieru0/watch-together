@@ -4,7 +4,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 
 import { selectAuth } from '../features/auth/authSlice';
-import { setRoomName } from '../features/room/roomSlice';
+import { setRoomName, setBasicRoomData } from '../features/room/roomSlice';
+import { setModalActive } from '../features/modal/modalSlice';
 
 import { useSocketContext } from '../context/socketContext';
 
@@ -75,6 +76,14 @@ const Room = () => {
         }
     }
 
+    const handleSettingsClick = () => {
+        dispatch(setModalActive({
+            active: true,
+            type: 'settings',
+            id: id
+        }));
+    }
+
     useEffect(() => {
         if (socket) {
             socket.on('sendRoomVideoUrl', link => {
@@ -118,6 +127,10 @@ const Room = () => {
                 dispatch(setRoomName(roomName));
             })
 
+            socket.on('sendBasicRoomData', data => {
+                dispatch(setBasicRoomData(data));
+            })
+
             socket.on('sendPlayingStatusToClient', playing => {
                 if (playing) {
                     socket.emit('requestCurrentProgressFromActiveSocket', id);
@@ -133,6 +146,7 @@ const Room = () => {
                 socket.off('sendKickFromRoomResponseAdmin');
                 socket.off('sendRoomName');
                 socket.off('sendPlayingStatusToClient');
+                socket.off('sendBasicRoomData');
 
                 dispatch(setRoomName(''));
             }
@@ -142,7 +156,7 @@ const Room = () => {
     return (
         <Container>
             <Wrapper>            
-                <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
+                <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onSettingsClick={handleSettingsClick} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
                 <RoomContent>
                     <VideoWrapper>
                         {videoLink ? <Video videoType={videoType} roomId={id} videoLink={videoLink} /> : <NoVideoText>The video hasn't been set yet</NoVideoText>}

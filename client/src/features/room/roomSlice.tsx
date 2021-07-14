@@ -1,16 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+import { BasicRoomData } from '../../types/types';
+
+type RoomType = 'public' | 'private';
+
 interface RoomState {
     passwordAfterCreation: string;
     roomIdFromLink: string;
     roomName: string;
+    basicRoomData: BasicRoomData | null
 }
 
 const initialState: RoomState = {
     passwordAfterCreation: '',
     roomIdFromLink: '',
     roomName: '',
+    basicRoomData: null
 }
 
 export const roomSlice = createSlice({
@@ -25,11 +31,14 @@ export const roomSlice = createSlice({
         },
         setRoomName: (state, action: PayloadAction<string>) => {
             state.roomName = action.payload;
+        },
+        setBasicRoomData: (state, action: PayloadAction<BasicRoomData>) => {
+            state.basicRoomData = {...action.payload};
         }
     }
 })
 
-export const { setPasswordAfterCreation, setRoomIdFromLink, setRoomName } = roomSlice.actions;
+export const { setPasswordAfterCreation, setRoomIdFromLink, setRoomName, setBasicRoomData } = roomSlice.actions;
 
 export const selectRoom = (state: RootState) => state.room;
 

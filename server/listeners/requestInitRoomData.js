@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestInitRoomData', roomId => {
-        const { sendRoomUsers, sendRoomCurrentAdminId, sendRoomName, sendRoomVideoUrl, sendRoomVideoType, sendPlayingStatusToClient } = events;
+        const { sendRoomUsers, sendRoomCurrentAdminId, sendRoomName, sendRoomVideoUrl, sendRoomVideoType, sendPlayingStatusToClient, sendBasicRoomData } = events;
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
@@ -14,6 +14,7 @@ module.exports = (io, socket) => {
             sendRoomVideoUrl(io, socket, roomId, selectedRoom);
             sendRoomVideoType(io, socket, roomId, selectedRoom);
             sendPlayingStatusToClient(io, socket, selectedRoom);
+            sendBasicRoomData(io, socket, roomId, selectedRoom);
         }
     })
 }

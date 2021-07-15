@@ -6,11 +6,10 @@ module.exports = (io, socket) => {
         const { sendRoomPasswordExist } = events;
 
         if (rooms[roomId]) {
-            if (rooms[roomId].password) {
-                sendRoomPasswordExist(io, socket, true, roomId);
-            } else {
-                sendRoomPasswordExist(io, socket, false, roomId);
-            }
+            const selectedRoom = rooms[roomId];
+            const ifPasswordExists = selectedRoom.password !== '';
+
+            sendRoomPasswordExist(io, socket, ifPasswordExists, roomId, selectedRoom.activeUsers.length < selectedRoom.usersNumberMax);
         }
     })
 }

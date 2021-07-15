@@ -9,14 +9,16 @@ module.exports = (io, socket) => {
             const selectedRoom = rooms[roomId];
 
             if (selectedRoom.currentAdminId === socket.id) {
-                selectedRoom.adminControl = data.adminControl;
-                selectedRoom.type = data.type;
-                selectedRoom.usersNumberMax = data.usersNumberMax;
-                selectedRoom.name = data.roomName;
-
-                sendBasicRoomData(io, socket, roomId, selectedRoom);
-                sendRoomsListUpdate(io, socket);
-                sendRoomName(io, socket, roomId, selectedRoom)
+                if (selectedRoom.activeUsers.length <= data.usersNumberMax) {
+                    selectedRoom.adminControl = data.adminControl;
+                    selectedRoom.type = data.type;
+                    selectedRoom.usersNumberMax = data.usersNumberMax;
+                    selectedRoom.name = data.roomName;
+    
+                    sendBasicRoomData(io, socket, roomId, selectedRoom);
+                    sendRoomsListUpdate(io, socket);
+                    sendRoomName(io, socket, roomId, selectedRoom)
+                }
             }
         }
     })

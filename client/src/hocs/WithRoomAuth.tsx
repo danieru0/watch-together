@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 
 import { selectAuth } from '../features/auth/authSlice';
@@ -13,6 +13,7 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
     return function Comp(props: P) {
         const socket = useSocketContext();
         const { id } = useParams<{id: string}>();
+        const history = useHistory();
         const authSelector = useAppSelector(selectAuth);
         const roomSelector = useAppSelector(selectRoom);
         const dispatch = useAppDispatch();
@@ -25,6 +26,8 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
                 socket.emit('requestRoomPasswordExist', id);
 
                 socket.on('sendRoomPasswordExist', data => {
+                    if (!data.canJoin) return history.push('/');
+
                     if (data.passwordStatus) {
                         if (roomSelector.passwordAfterCreation) {
                             socket.emit('requestJoinRoom', id, roomSelector.passwordAfterCreation, authSelector.login);
@@ -62,7 +65,7 @@ const WithRoomAuth = <P extends object>(Component: React.ComponentType<P>) => {
                     }
                 }
             }
-        }, [socket, id, roomSelector.passwordAfterCreation, roomSelector.roomIdFromLink, authSelector.login, dispatch]);
+        }, [socket, id, roomSelector.passwordAfterCreation, roomSelector.roomIdFromLink, authSelector.login, dispatch, history]);
 
         const handlePasswordFormiSubmit = (passwordValue: string) => {
             if (passwordFormSubmitted) return false;

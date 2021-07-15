@@ -3,8 +3,6 @@ import { RootState } from '../../app/store';
 
 import { BasicRoomData } from '../../types/types';
 
-type RoomType = 'public' | 'private';
-
 interface RoomState {
     passwordAfterCreation: string;
     roomIdFromLink: string;

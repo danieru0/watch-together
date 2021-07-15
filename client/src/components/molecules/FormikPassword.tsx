@@ -52,6 +52,7 @@ const Text = styled.span<TextProps>`
     font-weight: 300;
     user-select: none;
     margin-bottom: 30px;
+    text-align: center;
 `
 
 const StyledButton = styled(Button)`

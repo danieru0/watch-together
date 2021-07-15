@@ -16,15 +16,39 @@ interface IChat {
     adminId: string;
     userId: string;
     roomId: string;
+    mobileChatActive: boolean;
 }
 
-const Container = styled.div`
+interface ContainerProps {
+    mobileChatActive: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
     width: 30%;
     height: 100%;
     background: ${({theme}) => theme.primary};
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1230px) {
+        width: 38%;
+    }
+
+    @media (max-width: 1000px) {
+        width: 370px;
+        position: absolute;
+        right: 0;
+        box-shadow: -10px 0px 40px 10px #000;
+        transition: transform .8s cubic-bezier(1, 0, 0, 1);
+        transform: ${({mobileChatActive}) => mobileChatActive ? 'translateX(0)' : 'translateX(110%)'};
+    }
+
+    @media (max-width: 410px) {
+        width: 100%;
+    }
 `
 
-const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
+const Chat = ({activeUsers, adminId, userId, roomId, mobileChatActive}: IChat) => {
     const socket = useSocketContext();
     const [activeCard, setActiveCard] = useState('messages');
     const [selectedUserId, setSelectedUserId] = useState('');
@@ -71,7 +95,7 @@ const Chat = ({activeUsers, adminId, userId, roomId}: IChat) => {
     }, [socket])
 
     return (
-        <Container>
+        <Container mobileChatActive={mobileChatActive}>
             {
                 activeCard === 'messages' ? (
                     <>

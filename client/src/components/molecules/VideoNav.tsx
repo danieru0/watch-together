@@ -9,24 +9,65 @@ interface IVideoNav {
     onVideoLinkChange: (link: string, id: string) => void;
     onVideoTypeChange: (type: string) => void;
     onSettingsClick: () => void;
+    onMobileChatClick: () => void;
     videoLink: string;
     userId: string;
     adminId: string;
 }
 
-const Container = styled.div`
+const ContainerAdmin = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+    }
+`
+
+const ContainerNormal = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
 `
 
-const StyledButtonIcon = styled(ButtonIcon)`
-    &:first-of-type {
-        margin-left: 15px;
+const ButtonsWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 560px) {
+        justify-content: space-around;
+        margin-top: 10px;
     }
 `
 
-const StyledSettingsButtonIcon = styled(ButtonIcon)`
+const LeftButtonsWrapper = styled.div`
+    margin-left: 15px;
+    display: flex;
+
+    @media (max-width: 560px) {
+        margin: 0;
+    }
+`
+
+const RightButtonsWrapper = styled.div`
+    display: flex;
+
+    @media (max-width: 560px) {
+        margin-left: 0;
+    }
+`
+
+const MobileChatButton = styled(ButtonIcon)`
+    display: none;
+
+    @media (max-width: 1000px) {
+        display: block;
+    }
+`
+
+const StyledMobileChatButton = styled(MobileChatButton)`
     margin-left: auto;
 `
 
@@ -41,7 +82,7 @@ const NotLoggedLink = styled.span`
     text-align: center;
 `
 
-const VideoNav = ({onVideoLinkChange, onVideoTypeChange, onSettingsClick, videoLink, userId, adminId}: IVideoNav) => {
+const VideoNav = ({onVideoLinkChange, onVideoTypeChange, onSettingsClick, onMobileChatClick, videoLink, userId, adminId}: IVideoNav) => {
     const [videoTypeClicked, setVideoTypeClicked] = useState('youtube');
 
     const handleVideoLinkSubmit = (link: string) => {
@@ -70,21 +111,56 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, onSettingsClick, videoL
         }
     }
 
+    if (adminId === userId) {
+        return (
+            <ContainerAdmin>
+                <VideoLink onSubmit={handleVideoLinkSubmit}/>
+                <ButtonsWrapper>
+                    <LeftButtonsWrapper>
+                        <ButtonIcon fontSize="2em" isLogoIcon={true} iconType="youtube-square" fontColor={videoTypeClicked === 'youtube' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('youtube')} />
+                        <ButtonIcon fontSize="2em" iconType="external-link-square-alt" fontColor={videoTypeClicked === 'extlink' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('extlink')} />
+                    </LeftButtonsWrapper>
+                    <RightButtonsWrapper>
+                        <ButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={onSettingsClick} />
+                        <MobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
+                    </RightButtonsWrapper>
+                </ButtonsWrapper>
+            </ContainerAdmin>
+        )
+    }
+
     return (
-        <Container>
+        <ContainerNormal>
+            <NotLoggedLink>{videoLink ? videoLink : 'VIDEO IS NOT SET YET'}</NotLoggedLink>
+            <StyledMobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
+        </ContainerNormal>
+    )
+
+    return (
+        <ContainerAdmin>
             {
                 adminId === userId ? (
                     <>
                         <VideoLink onSubmit={handleVideoLinkSubmit}/>
-                        <StyledButtonIcon fontSize="2em" isLogoIcon={true} iconType="youtube-square" fontColor={videoTypeClicked === 'youtube' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('youtube')} />
-                        <StyledButtonIcon fontSize="2em" iconType="external-link-square-alt" fontColor={videoTypeClicked === 'extlink' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('extlink')} />
-                        <StyledSettingsButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={onSettingsClick} />
+                        <ButtonsWrapper>
+                            <LeftButtonsWrapper>
+                                <ButtonIcon fontSize="2em" isLogoIcon={true} iconType="youtube-square" fontColor={videoTypeClicked === 'youtube' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('youtube')} />
+                                <ButtonIcon fontSize="2em" iconType="external-link-square-alt" fontColor={videoTypeClicked === 'extlink' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('extlink')} />
+                            </LeftButtonsWrapper>
+                            <RightButtonsWrapper>
+                                <ButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={onSettingsClick} />
+                                <MobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
+                            </RightButtonsWrapper>
+                        </ButtonsWrapper>
                     </>
                 ) : (
-                    <NotLoggedLink>{videoLink ? videoLink : 'VIDEO IS NOT SET YET'}</NotLoggedLink>
+                    <>
+                        <NotLoggedLink>{videoLink ? videoLink : 'VIDEO IS NOT SET YET'}</NotLoggedLink>
+                        <StyledMobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
+                    </>
                 )
             }
-        </Container>
+        </ContainerAdmin>
     );
 };
 

@@ -18,12 +18,31 @@ const Container = styled.div`
     background: ${({theme}) => theme.secondary};
     padding: 50px 150px;
     position: relative;
+
+    @media (max-width: 735px) {
+        padding: 50px 0px;
+        width: 90%;
+    }
+
+    @media (max-width: 515px) {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 const StyledButtonIcon = styled(ButtonIcon)`
     position: absolute;
     top: -14px;
     right: -14px;
+
+    @media (max-width: 735px) {
+        top: 0;
+        right: 0;
+    }
 `
 
 const RoomSettingsModal = ({basicRoomData, roomId, onCloseClick}: IRoomSettingsModal) => {

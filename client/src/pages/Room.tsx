@@ -27,6 +27,10 @@ const Wrapper = styled.div`
     padding: 50px 0px;
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 1635px) {
+        width: 98%;
+    }
 `
 
 const RoomContent = styled.div`
@@ -35,6 +39,8 @@ const RoomContent = styled.div`
     height: 100%;
     margin-top: 30px;
     justify-content: space-between;
+    position: relative;
+    overflow-x: hidden;
 `
 
 const VideoWrapper = styled.div`
@@ -45,6 +51,10 @@ const VideoWrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    @media (max-width: 1000px) {
+        width: 100%;
+    }
 `
 
 const NoVideoText = styled.span`
@@ -63,6 +73,7 @@ const Room = () => {
     const [adminId, setAdminId] = useState('');
     const [videoLink, setVideoLink] = useState('');
     const [videoType, setVideoType] = useState('youtube');
+    const [mobileChatActive, setMobileChatActive] = useState(false);
 
     const handleVideoLinkChange = (link: string, linkId: string) => {
         if (socket) {
@@ -82,6 +93,10 @@ const Room = () => {
             type: 'settings',
             id: id
         }));
+    }
+
+    const handleMobileChatClick = () => {
+        setMobileChatActive(prev => !prev);
     }
 
     useEffect(() => {
@@ -156,12 +171,12 @@ const Room = () => {
     return (
         <Container>
             <Wrapper>            
-                <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onSettingsClick={handleSettingsClick} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
+                <VideoNav adminId={adminId} userId={authSelector.userId} videoLink={videoLink} onMobileChatClick={handleMobileChatClick} onSettingsClick={handleSettingsClick} onVideoTypeChange={handleVideoTypeChange} onVideoLinkChange={handleVideoLinkChange} />
                 <RoomContent>
                     <VideoWrapper>
                         {videoLink ? <Video videoType={videoType} roomId={id} videoLink={videoLink} /> : <NoVideoText>The video hasn't been set yet</NoVideoText>}
                     </VideoWrapper>
-                    <Chat roomId={id} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
+                    <Chat roomId={id} mobileChatActive={mobileChatActive} userId={authSelector.userId} adminId={adminId} activeUsers={activeUsers} />
                 </RoomContent>
             </Wrapper>
         </Container>

@@ -21,13 +21,15 @@ const Text = styled.span`
     font-size: 1.5em;
     font-weight: 300;
     user-select: none;
+    text-align: center;
+    padding: 0px 10px;
 `
 
 const Kicked = () => {
     return (
         <Container>
             <StyledIcon spin icon={['fab', 'sticker-mule']} />
-            <Text>You have been kicked from the room!</Text>
+            <Text>You've been kicked from the room!</Text>
         </Container>
     );
 };

@@ -32,6 +32,14 @@ const Input = styled.input`
     outline: none;
     text-align: center;
     padding: 0px 10px;
+
+    @media (max-width: 730px) {
+        width: 250px;
+    }
+
+    @media (max-width: 345px) {
+        width: 200px;
+    }
 `
 
 const StyledButton = styled(Button)`

@@ -24,6 +24,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 600px;
     margin-top: 200px;
+
+    @media (max-width: 700px) {
+        margin-top: 100px;
+    }
+
+    @media (max-width: 600px) {
+        width: 90%;
+    }
 `
 
 const StyledLink = styled(Link)`
@@ -62,6 +70,10 @@ const StyledRoomButton = styled(RoomButton)`
 
     &:nth-child(even) {
         margin-left: 100px;
+    }
+
+    @media (max-width: 410px) {
+        margin: 30px 0px !important;
     }
 `
 

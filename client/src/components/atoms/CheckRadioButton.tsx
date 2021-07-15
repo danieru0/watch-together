@@ -64,6 +64,10 @@ const Label = styled.label`
     font-size: 1.3em;
     user-select: none;
     text-transform: uppercase;
+
+    @media (max-width: 430px) {
+        font-size: 0.9em;
+    }
 `
 
 const CheckRadioButton = ({type, id, label, value, name, isCenter = true, onChange, checked, ...props}: ICheckRadioButton) => {

@@ -21,11 +21,10 @@ const ChatInputSchema = Yup.object().shape({
 
 const Container = styled.div`
     width: 100%;
-    height: 15%;
     background: ${({theme}) => theme.primaryHover};
     display: flex;
     align-items: center;
-    padding: 0px 15px;
+    padding: 15px 15px;
 `
 
 const StyledForm = styled(Form)`
@@ -43,6 +42,10 @@ const Input = styled.input`
     color: #fff;
     padding: 0px 5px;
     margin-right: 10px;
+
+    @media (max-width: 384px) {
+        width: 140px;
+    }
 `
 
 const StyledButtonIcon = styled(ButtonIcon)`

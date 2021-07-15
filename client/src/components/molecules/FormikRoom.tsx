@@ -75,6 +75,10 @@ const StyledSlider = styled(Slider)`
     height: 40px;
     margin-bottom: 10px;
 
+    @media (max-width: 430px) {
+        width: 90%;
+    }
+
     .rc-slider-rail {
         background: ${({theme}) => theme.functional};
     }
@@ -146,7 +150,6 @@ const Create = ({formikType, basicRoomData, submitted, onSubmit}: IFormikRoom) =
                         <CheckRadioButton isCenter={false} onChange={handleChange} name="adminControl" type="checkbox" id="admin-checkbox" label="Only admin can control the video" value="adminControl" checked={values.adminControl} />
                         <ButtonsWrapper>
                             <StyledButton loading={submitted} type="submit">{formikType === 'create' ? 'Create' : 'Update'}</StyledButton>
-                            {formikType === 'settings' && <StyledButton>Delete room</StyledButton>}
                         </ButtonsWrapper>
                     </StyledForm>
                 )}

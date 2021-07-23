@@ -10,21 +10,25 @@ const Container = styled.li`
     margin: 5px 0px;
 `
 
+interface UserMessageProps {
+    servermessage?: string;
+}
+
 const Nick = styled.span`
     color: ${({theme}) => theme.fontcolorSecondary};
 `
 
-const UserMessage = styled.span`
-    color: ${({theme}) => theme.fontColorPrimary};
+const UserMessage = styled.span<UserMessageProps>`
+    color: ${({theme, servermessage}) => servermessage ? theme.fontColorPrimary : theme.red};
     word-break: break-all;
-    margin-left: 5px;
+    margin-left: ${({servermessage}) => servermessage && '5px'};
 `
 
 const Message = ({login, message}: ChatMessage) => {
     return (
         <Container>
-            <Nick>{`${login}:`}</Nick>
-            <UserMessage>{message}</UserMessage>
+            {login && <Nick>{`${login}:`}</Nick>}
+            <UserMessage servermessage={login}>{message}</UserMessage>
         </Container>
     );
 };

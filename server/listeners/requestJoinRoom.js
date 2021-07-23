@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestJoinRoom', (roomId, password, login) => {
-        const { sendJoinRoomConnectionStatus, sendRoomsListUpdate, sendError } = events;
+        const { sendJoinRoomConnectionStatus, sendRoomsListUpdate, sendError, sendMessage } = events;
 
         if (rooms[roomId]) {
             if (rooms[roomId].password === password) {
@@ -12,6 +12,7 @@ module.exports = (io, socket) => {
 
                 sendJoinRoomConnectionStatus(io, socket, roomId, true);
                 sendRoomsListUpdate(io, socket);
+                sendMessage(io, socket, roomId, '', '', `User ${login} has connected to the room!`);
             } else {
                 sendJoinRoomConnectionStatus(io, socket, roomId, false);
             }

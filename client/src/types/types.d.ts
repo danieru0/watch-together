@@ -20,6 +20,6 @@ export interface BasicRoomData {
 }
 
 export interface ChatMessage {
-    login: string;
+    login?: string;
     message: string;
 }

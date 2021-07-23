@@ -135,33 +135,6 @@ const VideoNav = ({onVideoLinkChange, onVideoTypeChange, onSettingsClick, onMobi
             <StyledMobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
         </ContainerNormal>
     )
-
-    return (
-        <ContainerAdmin>
-            {
-                adminId === userId ? (
-                    <>
-                        <VideoLink onSubmit={handleVideoLinkSubmit}/>
-                        <ButtonsWrapper>
-                            <LeftButtonsWrapper>
-                                <ButtonIcon fontSize="2em" isLogoIcon={true} iconType="youtube-square" fontColor={videoTypeClicked === 'youtube' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('youtube')} />
-                                <ButtonIcon fontSize="2em" iconType="external-link-square-alt" fontColor={videoTypeClicked === 'extlink' ? 'primary' : 'notSelected'} onClick={() => handleVideoTypeClick('extlink')} />
-                            </LeftButtonsWrapper>
-                            <RightButtonsWrapper>
-                                <ButtonIcon fontSize="2em" iconType="cog" fontColor="primary" onClick={onSettingsClick} />
-                                <MobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
-                            </RightButtonsWrapper>
-                        </ButtonsWrapper>
-                    </>
-                ) : (
-                    <>
-                        <NotLoggedLink>{videoLink ? videoLink : 'VIDEO IS NOT SET YET'}</NotLoggedLink>
-                        <StyledMobileChatButton fontSize="2em" iconType="comments" fontColor="primary" onClick={onMobileChatClick} />
-                    </>
-                )
-            }
-        </ContainerAdmin>
-    );
 };
 
 export default VideoNav;

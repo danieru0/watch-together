@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestSetRoomVideoUrl', (roomId, videoUrl, videoId) => {
-        const { sendRoomVideoUrl, sendError } = events;
+        const { sendRoomVideoUrl, sendError, sendMessage } = events;
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
@@ -13,6 +13,7 @@ module.exports = (io, socket) => {
                 selectedRoom.videoId = videoId;
 
                 sendRoomVideoUrl(io, socket, roomId, selectedRoom);
+                sendMessage(io, socket, roomId, '', '', 'Video link has been changed!');
             } else {
                 sendError(io, socket, 'You are not an admin!');
             }

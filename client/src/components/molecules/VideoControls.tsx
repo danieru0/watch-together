@@ -26,23 +26,40 @@ const Container = styled.div`
     background: ${({theme}) => theme.primaryHover};
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+
+    @media (max-width: 1000px) {
+        display: flex;
+    }
 `
 
 const LeftControlsWrapper = styled.div`
     display: flex;
     align-items: center;
     padding-left: 20px;
+
+    @media (max-width: 420px) {
+        padding: 0px;
+    }
 `
 
 const ProgressBarWrapper = styled.div`
     display: flex;
     align-items: center;
+
+    @media (max-width: 1000px) {
+        justify-content: center;
+        width: 100%;
+    }
 `
 
 const RightControlsWrapper = styled.div`
     display: flex;
     align-items: center;
     padding-right: 20px;
+
+    @media (max-width: 420px) {
+        padding: 0px;
+    }
 `
 
 const StyledSliderVolume = styled(Slider)`
@@ -58,6 +75,10 @@ const StyledSliderVolume = styled(Slider)`
         height: 15px;
         background: ${({theme}) => theme.primary};
         border: none;
+    }
+
+    @media (max-width: 655px) {
+        width: 50px;
     }
 `
 
@@ -79,6 +100,14 @@ const StyledSliderProgress = styled(Slider)`
         height: 20px;
         background: ${({theme}) => theme.primary};
         border: none;
+    }
+
+    @media (max-width: 570px) {
+        width: 200px;
+    }
+
+    @media (max-width: 360px) {
+        width: 130px;
     }
 `
 

@@ -40,11 +40,9 @@ const YoutubeVideo = ({videoLink, videoType, roomId}: IYoutubeVideo) => {
 
     const handleOnReady = () => {
         if (ContainerRef && ContainerRef.current && videoDimensions.width === '0px' && videoDimensions.height === '0px') {
-            const containerRect = ContainerRef.current.getBoundingClientRect();
-            
             setVideoDimensions({
-                width: `${containerRect.width}px`,
-                height: `${containerRect.height - 60}px` 
+                width: '100%',
+                height: '100%'
             })
         }
     }
@@ -68,10 +66,6 @@ const YoutubeVideo = ({videoLink, videoType, roomId}: IYoutubeVideo) => {
         if (ContainerRef && ContainerRef.current) {
             if (!document.fullscreenElement) {
                 ContainerRef.current.requestFullscreen().then(() => {
-                    setVideoDimensions({
-                        width: `100%`,
-                        height: `100%` 
-                    })
                 }).catch(err => {
                     alert(`Error while attempting to enable fullscreen mode: ${err.message}`);
                 })

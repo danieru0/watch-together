@@ -12,7 +12,7 @@ module.exports = (io, socket) => {
 
                 sendJoinRoomConnectionStatus(io, socket, roomId, true);
                 sendRoomsListUpdate(io, socket);
-                sendMessage(io, socket, roomId, '', '', `User ${login} has connected to the room!`);
+                sendMessage(io, socket, roomId, undefined, '', `User ${login} has connected to the room!`);
             } else {
                 sendJoinRoomConnectionStatus(io, socket, roomId, false);
             }

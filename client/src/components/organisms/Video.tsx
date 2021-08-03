@@ -81,6 +81,8 @@ const YoutubeVideo = ({videoLink, videoType, roomId}: IYoutubeVideo) => {
         }
     }
 
+    console.log(videoProgress);
+
     const handleDuration = (duration: number) => {
         setVideoLengthSeconds(duration);
     }
@@ -88,9 +90,12 @@ const YoutubeVideo = ({videoLink, videoType, roomId}: IYoutubeVideo) => {
     useEffect(() => {
         if (socket) {
             socket.on('sendRoomVideoStatus', data => {
+                const currentPlayerRef = PlayerRef.current! as BaseReactPlayerProps;
+
                 setSocketPlayingStatus(data.playing);
                 setVideoIsPlaying(data.playing);
                 setVideoProgress(data.progress);
+                currentPlayerRef.seekTo(data.progress);
             });
 
             socket.on('sendRoomVideoDuration', duration => {

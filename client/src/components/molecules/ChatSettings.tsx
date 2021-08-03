@@ -18,7 +18,7 @@ const Container = styled.div`
     background: ${({theme}) => theme.primaryHover};
     display: flex;
     align-items: center;
-    padding: 0px 15px;
+    padding: 15px 15px;
 `
 
 const StyledButton = styled(Button)`

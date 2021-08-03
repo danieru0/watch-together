@@ -5,6 +5,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSignOutAlt, faUser, faExternalLinkSquareAlt, faCog, faComments, faTimes, faCircleNotch, faLock, faPause, faPlay, faVolumeUp, faVolumeMute, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { faYoutubeSquare, faStickerMule } from '@fortawesome/free-brands-svg-icons';
 import { io, Socket } from 'socket.io-client';
+import ReactNotification, { store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+
 
 import socketContext from './context/socketContext';
 
@@ -50,12 +53,29 @@ function App() {
 	useEffect(() => {
 		const socket = io();
 
+		socket.on('sendNotificationToUser', (title, message, type) => {
+			store.addNotification({
+				title: title,
+				message: message,
+				type: type,
+				insert: "bottom",
+				container: "bottom-left",
+				animationIn: ["animate__animated", "animate__fadeIn"],
+				animationOut: ["animate__animated", "animate__fadeOut"],
+				dismiss: {
+					duration: 3000,
+					onScreen: true
+				}
+			})
+		})
+
 		setSocket(socket);
 	}, [])
 
 	return (
 		<GlobalContainer>
 			<socketContext.Provider value={socket}>
+				<ReactNotification />
 				<Modal />
 				<Nav />
 				<GlobalWrapper>

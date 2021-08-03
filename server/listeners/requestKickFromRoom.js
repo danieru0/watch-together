@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestKickFromRoom', (roomId, userId) => {
-        const { sendRoomUsers, sendKickFromRoomResponseUser,  sendKickFromRoomResponseAdmin, sendMessage } = events;
+        const { sendRoomUsers, sendKickFromRoomResponseUser, sendNotificationToUser, sendMessage } = events;
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
@@ -21,7 +21,7 @@ module.exports = (io, socket) => {
 
                 sendKickFromRoomResponseUser(io, socket, userId);
                 sendRoomUsers(io, socket, selectedRoom, roomId);
-                sendKickFromRoomResponseAdmin(io, socket);
+                sendNotificationToUser(io, socket, 'Success!', 'User has been kicked!', 'success');
                 sendMessage(io, socket, roomId, '', '', `User ${userLogin} has been kicked!`);
             }
         }

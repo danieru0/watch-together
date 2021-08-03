@@ -133,10 +133,6 @@ const Room = () => {
             socket.on('sendKickFromRoomResponseUser', () => {
                 history.push('/kicked');
             })
-           
-            socket.on('sendKickFromRoomResponseAdmin', () => {
-                alert('User kicked!');
-            })
 
             socket.on('sendRoomName', roomName => {
                 dispatch(setRoomName(roomName));

@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestAdminChange', (roomId, userId) => {
-        const { sendRoomCurrentAdminId, sendMessage } = events;
+        const { sendRoomCurrentAdminId, sendMessage, sendNotificationToUser } = events;
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
@@ -15,6 +15,7 @@ module.exports = (io, socket) => {
 
                 sendRoomCurrentAdminId(io, socket, roomId, selectedRoom);
                 sendMessage(io, socket, roomId, '', '', `User ${selectedUser[userId]} is new admin of this room!`);
+                sendNotificationToUser(io, socket, 'Success!', 'Admin has been changed!', 'success');
             }
         }
     })

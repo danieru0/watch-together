@@ -3,7 +3,7 @@ const { rooms } = require('../data/data');
 
 module.exports = (io, socket) => {
     socket.on('requestRoomSettingsUpdate', (roomId, data) => {
-        const { sendBasicRoomData, sendRoomsListUpdate, sendRoomName } = events;
+        const { sendBasicRoomData, sendRoomsListUpdate, sendRoomName, sendNotificationToUser } = events;
 
         if (rooms[roomId]) {
             const selectedRoom = rooms[roomId];
@@ -18,6 +18,7 @@ module.exports = (io, socket) => {
                     sendBasicRoomData(io, socket, roomId, selectedRoom);
                     sendRoomsListUpdate(io, socket);
                     sendRoomName(io, socket, roomId, selectedRoom)
+                    sendNotificationToUser(io, socket, 'Success!', 'Room has been updated!', 'success');
                 }
             }
         }

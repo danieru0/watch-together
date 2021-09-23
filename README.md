@@ -3,7 +3,7 @@
 # Watch together
 
 > Watch videos together with your friends!
-> Create a room, set the video, play and enjoy!
+> Create a room, invite someone, set the video, play and enjoy!
 
 ***Technologies***
 
